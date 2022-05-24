@@ -18,6 +18,8 @@ const UserModel = require("./models/user")
 const userRoute = require("./routes/User")
 app.use("/auth", userRoute)
 
+
+
 //Needs this at the start, BE server runs on port 3001, then FE runs on 3000
 app.listen(3001, () => {
     console.log("SERVER RUNNING");
