@@ -14,12 +14,12 @@ function App() {
         <NavigationBar />
         <Routes>
           <Route path="/" exact element={ <LandingPage />} />
-          <Route path="/dashboard" exact element={ <Dashboard />  } />
         </Routes>
         <section className="container">
           <Routes>
             <Route path="/login" exact element={ <Login />  } />
             <Route path="/register" exact element={<Registration />} />
+            <Route path="/dashboard" exact element={ <Dashboard />  } />
           </Routes>
         </section>
        </BrowserRouter>
