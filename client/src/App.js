@@ -5,24 +5,54 @@ import Registration from "./pages/Registration"
 import Dashboard from "./pages/Dashboard"
 import LandingPage from './pages/LandingPage';
 import NavigationBar from './components/NavigationBar';
+import { AuthContext } from "./helpers/AuthContext";
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
 
 function App() {
+  const [authState, setAuthState] = useState({
+    username: "",
+    id: 0,
+    status: false,
+  })
+
+  useEffect(() => {
+    axios.get('http://localhost:3001/auth/auth', {
+      headers: {
+        accessToken: localStorage.getItem("accessToken"),
+      },
+    }).then((response) => {
+      if (response.data.error) {
+        setAuthState({...authState, status: false});
+      } else {
+        setAuthState({
+          username: response.data.username,
+          id: response.data.id,
+          status: true,
+        });
+      }
+    })
+
+  },[])
+
   return (
     <div className="App">
-      <BrowserRouter>
-        <NavigationBar />
-        <Routes>
-          <Route path="/" exact element={ <LandingPage />} />
-        </Routes>
-        <section className="container">
+      <AuthContext.Provider value={{ authState, setAuthState }}>
+        <BrowserRouter>
+          <NavigationBar />
           <Routes>
-            <Route path="/login" exact element={ <Login />  } />
-            <Route path="/register" exact element={<Registration />} />
-            <Route path="/dashboard" exact element={ <Dashboard />  } />
+            <Route path="/" exact element={ <LandingPage />} />
           </Routes>
-        </section>
-       </BrowserRouter>
+          <section className="container">
+            <Routes>
+              <Route path="/login" exact element={ <Login />  } />
+              <Route path="/register" exact element={<Registration />} />
+              <Route path="/dashboard" exact element={ <Dashboard />  } />
+            </Routes>
+          </section>
+        </BrowserRouter>
+      </AuthContext.Provider>
     </div>
   );
 }

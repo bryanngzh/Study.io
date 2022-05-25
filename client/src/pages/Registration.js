@@ -1,16 +1,26 @@
 import axios from "axios"
+import { Alert } from "bootstrap";
 import { useState } from "react"
+import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
 const Registration = () => {
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+
+    let navigate = useNavigate();
     
     const registerUser = (event) => {
         event.preventDefault()
         axios.post("http://localhost:3001/auth", {username, email, password}).then((response) => {
             console.log(response.data)
+            if (response.data.error) {
+                Alert(response.data.error)
+            } else {
+                navigate("/login")
+            }
         })
     }
 

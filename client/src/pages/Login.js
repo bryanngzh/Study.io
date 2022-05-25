@@ -1,11 +1,13 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import { Link } from 'react-router-dom';
 import axios from "axios"
 import { useNavigate } from "react-router"
+import { AuthContext } from "../helpers/AuthContext";
 
 const Login = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const { setAuthState } = useContext(AuthContext)
 
     let navigate = useNavigate();
 
@@ -15,8 +17,9 @@ const Login = () => {
             if (response.data.error) {
                 alert(response.data.error)
             } else {
-                localStorage.setItem("accessToken", response.data)
-                navigate("/dashboard")
+              localStorage.setItem("accessToken", response.data.token)
+              setAuthState({ username: response.data.username, id: response.data.id, status: true})
+              navigate("/dashboard")
             }
         })
     }
