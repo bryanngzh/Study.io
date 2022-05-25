@@ -1,4 +1,3 @@
-import { Button } from 'bootstrap';
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../helpers/AuthContext';
@@ -13,11 +12,17 @@ const NavigationBar = () => {
   }
 
     return (
-        <nav className="navbar bg-dark">
+      <nav className="navbar bg-dark">
       <h1>
-        <Link to="/">
+        {!authState.status ? 
+        (<Link to="/">
           <i className="fas fa-laptop-code"></i> Study.io
-        </Link>
+        </Link>)
+            : 
+        (<Link to="/dashboard">
+          <i className="fas fa-home"></i> Dashboard
+        </Link>)
+        }
       </h1>
         <ul>
           {!authState.status ? (

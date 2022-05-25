@@ -1,17 +1,25 @@
 import axios from "axios"
 import { Alert } from "bootstrap";
-import { useState } from "react"
+import { useState, useContext, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
-import { Navigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { AuthContext } from "../helpers/AuthContext";
 
 const Registration = () => {
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
 
+    const { authState } = useContext(AuthContext);
+
     let navigate = useNavigate();
-    
+
+    useEffect(() => {
+        if (authState.status) {
+          navigate('/dashboard')
+        }
+    })
+
     const registerUser = (event) => {
         event.preventDefault()
         axios.post("http://localhost:3001/auth", {username, email, password}).then((response) => {

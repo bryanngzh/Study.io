@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { Link } from 'react-router-dom';
 import axios from "axios"
 import { useNavigate } from "react-router"
@@ -7,9 +7,15 @@ import { AuthContext } from "../helpers/AuthContext";
 const Login = () => {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
-    const { setAuthState } = useContext(AuthContext)
+    const { setAuthState, authState } = useContext(AuthContext)
 
     let navigate = useNavigate();
+  
+    useEffect(() => {
+      if (authState.status) {
+        navigate('/dashboard')
+      }
+    })
 
     const loginUser = (event) => {
         event.preventDefault()
