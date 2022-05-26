@@ -1,6 +1,12 @@
+import Task from "../components/Task"
+
 const Dashboard = () => {
   return (
-    <div>Dashboard</div>
+    <>
+      <div>Dashboard</div>
+      <Task />
+    </>
+    
   )
 }
 
