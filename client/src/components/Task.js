@@ -3,7 +3,6 @@ import axios from "axios"
 
 const Task = () => {
 
-    
     const [inputVal, setInputVal] = useState("")
     const [tasks, setTasks] = useState([])
 
@@ -25,8 +24,29 @@ const Task = () => {
 
     const addTask = (event) => {
         event.preventDefault()
-        axios.post("http://localhost:3001/task/addTask", {
+        if (inputVal.length > 0) {
+            axios.post("http://localhost:3001/task/addTask", {
             text: inputVal, completed: false,
+            }, {
+                headers: {
+                    accessToken: localStorage.getItem("accessToken")
+                },
+            }).then((response) => {
+                if (response.data.error) {
+                    alert(response.data.error)
+                } else {
+                    setTasks([...tasks, response.data])
+                    setInputVal("")
+                }
+            })
+        } else {
+            alert("Please add a task!")
+        }
+    }
+
+    const toggleTask = (event) => {
+        axios.post("http://localhost:3001/task/toggle", {
+            _id: event._id, completed: !event.completed,
         }, {
             headers: {
                 accessToken: localStorage.getItem("accessToken")
@@ -35,16 +55,20 @@ const Task = () => {
             if (response.data.error) {
                 alert(response.data.error)
             } else {
-                setTasks([...tasks, response.data])
-                setInputVal("")
+                const newTasks = tasks.map(task => {
+                    if (task._id === event._id) {
+                        task.completed = !event.completed
+                    }
+                    return task
+                })
+                setTasks([...newTasks])
             }
         })
     }
 
-    const toggleTask = (event) => {
-        event.preventDefault()
-        axios.post("http://localhost:3001/task/toggle", {
-            _id: event.data._id, completed: event.data.completed,
+    const deleteTask = (event) => {
+        axios.post("http://localhost:3001/task/deleteTask", {
+            _id: event._id, 
         }, {
             headers: {
                 accessToken: localStorage.getItem("accessToken")
@@ -74,8 +98,9 @@ const Task = () => {
           <ul>
               {tasks.map(task => (
                   <li>
-                      <input type={"checkbox"} onClick={() => toggleTask(task)} checked={task.completed}/>
-                      {task.text}
+                      <input type={"checkbox"}  onClick={() => toggleTask(task)} checked={task.completed}/>
+                      {task.completed ? <del>{task.text}</del> : task.text}
+                      <input type="button" value="Delete" onClick={() => deleteTask(task)}/>
                   </li>
               ))}
           </ul>

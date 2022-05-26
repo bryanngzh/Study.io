@@ -42,7 +42,7 @@ router.post("/deleteTask", validateToken, async (req, res) => {
 router.post("/toggle", validateToken, async (req, res) => {
     
     TaskModel.findByIdAndUpdate(req.body._id, {
-        completed: !req.body.completed
+        completed: req.body.completed
     }).exec()
     res.json("SUCCESS")
 })
