@@ -1,14 +1,14 @@
 const express = require("express")
 const router = express.Router();
 const { validateToken } = require("../middlewares/AuthMiddleware")
+const mongoose = require("mongoose")
 
 // Models
 const TaskModel = require("../models/task")
 
 // Display Tasks
-router.post("/", validateToken, async (req, res) => {
+router.get("/", validateToken, async (req, res) => {
     const email = req.user.email
-
     TaskModel.where({ email: email }).find((err, data) => {
         if (data) {
             res.json(data)
@@ -20,62 +20,31 @@ router.post("/", validateToken, async (req, res) => {
 
 // Add Task
 router.post("/addTask", validateToken, async (req, res) => {
-    const email = req.user.email
-
-    const user = await TaskModel.findOne({
-        email: email
+    TaskModel.create({
+        text: req.body.text,
+        completed: req.body.completed,
+        email: req.user.email,
     })
-
-    if (!user) {
-        res.json("Unable to add data")
-    } else {
-        TaskModel.create({
-            text: req.body.text,
-            completed: req.body.completed,
-            email: req.body.email,
-        })
-        res.json("SUCCESS")
-    }
+    res.json("SUCCESS")
 })
 
 // Delete Task
 router.post("/deleteTask", validateToken, async (req, res) => {
-    const email = req.user.email
-
-    const user = await TaskModel.findOne({
-        email: email
-    })
-
-    if (!user) {
-        res.json("Unable to delete data")
-    } else {
-        TaskModel.remove({
-            text: req.body.text,
-            completed: req.body.completed,
-            email: req.body.email,
-        })
+    try {
+        await TaskModel.findByIdAndRemove(req.body._id).exec()
         res.json("SUCCESS")
+    } catch (error) {
+        res.json("ERROR")
     }
 })
 
 // toggleComplete
 router.post("/toggle", validateToken, async (req, res) => {
-    const email = req.user.email
-
-    const user = await TaskModel.findOne({
-        email: email
-    })
-
-    if (!user) {
-        res.json("Unable to toggle")
-    } else {
-        TaskModel.updateOne({
-            text: req.body.text,
-            completed: !req.body.completed,
-            email: req.body.email,
-        })
-        res.json("SUCCESS")
-    }
+    
+    TaskModel.findByIdAndUpdate(req.body._id, {
+        completed: !req.body.completed
+    }).exec()
+    res.json("SUCCESS")
 })
 
 module.exports = router
