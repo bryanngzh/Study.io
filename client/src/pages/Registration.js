@@ -1,5 +1,4 @@
 import axios from "axios"
-import { Alert } from "bootstrap";
 import { useState, useContext, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
@@ -25,7 +24,7 @@ const Registration = () => {
         axios.post("http://localhost:3001/auth", {username, email, password}).then((response) => {
             console.log(response.data)
             if (response.data.error) {
-                Alert(response.data.error)
+                alert(response.data.error)
             } else {
                 navigate("/login")
             }
