@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useContext, useEffect } from 'react';
+import { useNavigate } from "react-router"
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../helpers/AuthContext';
 
 const LandingPage = () => {
+
+  const { authState } = useContext(AuthContext);
+
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    if (authState.status) {
+      navigate('/dashboard')
+    }
+  })
+
     return (
       <section className="landing">
         <div className="dark-overlay">
