@@ -45,7 +45,7 @@ function App() {
           </Routes>
           <section className="container">
             <Routes>
-              <Route path="/login" exact element={ <Login />  } />
+              {/* <Route path="/login" exact element={ <Login />  } /> */}
               <Route path="/register" exact element={<Registration />} />
               <Route path="/dashboard" exact element={ <Dashboard />  } />
             </Routes>
