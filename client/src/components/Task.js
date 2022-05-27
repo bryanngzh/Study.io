@@ -1,5 +1,29 @@
 import { useState, useEffect } from "react"
 import axios from "axios"
+import {
+    Table,
+    Thead,
+    Tbody,
+    Tfoot,
+    Tr,
+    Th,
+    Td,
+    TableCaption,
+    TableContainer,
+  } from '@chakra-ui/react'
+import { Checkbox, CheckboxGroup } from '@chakra-ui/react'
+import {
+    FormControl,
+    FormLabel,
+    FormErrorMessage,
+    FormHelperText,
+  } from '@chakra-ui/react'
+import { Input } from '@chakra-ui/react'
+import { Box } from '@chakra-ui/react'
+import { IconButton } from '@chakra-ui/react'
+import { DeleteIcon } from '@chakra-ui/icons'
+
+
 
 const Task = () => {
 
@@ -23,6 +47,7 @@ const Task = () => {
     }, [tasks])
 
     const addTask = (event) => {
+        
         event.preventDefault()
         if (inputVal.length > 0) {
             axios.post("http://localhost:3001/task/addTask", {
@@ -42,6 +67,7 @@ const Task = () => {
         } else {
             alert("Please add a task!")
         }
+        
     }
 
     const toggleTask = (event) => {
@@ -84,25 +110,56 @@ const Task = () => {
 
     return (
         <div>
-            <form className="form" onSubmit={addTask}>
-                <div className="form-group">
-                <input 
-                    value={inputVal}
-                    type="text"
-                    placeholder="Add Task..." 
-                    onChange={e => setInputVal(e.target.value)}
-                />
-                </div>
-          </form>
-          <ul>
-              {tasks.map(task => (
-                  <li>
-                      <input type={"checkbox"}  onClick={() => toggleTask(task)} checked={task.completed}/>
-                      {task.completed ? <del>{task.text}</del> : task.text}
-                      <input type="button" value="Delete" onClick={() => deleteTask(task)}/>
-                  </li>
-              ))}
-          </ul>
+            <Box>
+                <form className="form" onSubmit={addTask}>
+                    <FormControl>
+                        <FormLabel>Tasks</FormLabel>
+                        <Input
+                            size="sm" 
+                            placeholder="Add a task..." 
+                            value={inputVal}
+                            type="text"
+                            onChange={e => setInputVal(e.target.value)}
+                        />
+                    </FormControl>
+                </form>
+                <TableContainer>
+                    <Table variant='striped' colorScheme='blue' size="sm">
+                        <Thead>
+                        <Tr>
+                            <Th>Completed</Th>
+                            <Th>Task</Th>
+                            <Th isNumeric> </Th>
+                        </Tr>
+                        </Thead>
+                        <Tbody>
+                            {tasks.map(task => (
+                                <Tr>
+                                    <><Td>
+                                        <Box onClick={() => toggleTask(task)}>
+                                            <Checkbox defaultChecked isChecked={task.completed}> </Checkbox>
+                                        </Box>
+                                    </Td>
+                                    <Td>
+                                        {task.completed ? <del>{task.text}</del> : task.text}
+                                    </Td>
+                                    <Td isNumeric>
+                                        <IconButton variant="ghost" size="sm" icon={<DeleteIcon />} onClick={() => deleteTask(task)} />
+                                    </Td>
+                                    </>
+                                </Tr>
+                            ))}
+                        </Tbody>
+                        <Tfoot>
+                        <Tr>
+                            <Th> </Th>
+                            <Th> </Th>
+                            <Th isNumeric>{tasks.filter(task => task.completed).length}/{tasks.length} Task{tasks.length > 1 ? "s" : ""} Done</Th>
+                        </Tr>
+                        </Tfoot>
+                    </Table>
+                </TableContainer>
+            </Box>
         </div>
     )
     
