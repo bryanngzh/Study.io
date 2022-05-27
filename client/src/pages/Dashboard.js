@@ -2,6 +2,7 @@ import Task from "../components/Task";
 import { useState, useContext, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../helpers/AuthContext";
+import { Heading } from '@chakra-ui/react'
 
 const Dashboard = () => {
 
@@ -11,13 +12,13 @@ const Dashboard = () => {
 
     useEffect(() => {
         if (!authState.status) {
-          navigate('/')
+          navigate('/');
         }
     })
 
   return (
     <>
-      <div>Dashboard, Welcome {authState.username}</div>
+      <Heading size="md">Welcome back, {authState.username.toUpperCase()}</Heading>
       <Task />
     </>
     
