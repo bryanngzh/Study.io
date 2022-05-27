@@ -18,7 +18,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 
 const pages = ['dashboard'];
 const links = ['/dashboard'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Logout'];
 
 const NavigationBar = () => {
 
@@ -161,7 +161,7 @@ const NavigationBar = () => {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem key={setting} onClick={ logout }>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
