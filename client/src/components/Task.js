@@ -93,7 +93,6 @@ const Task = () => {
                     onChange={e => setInputVal(e.target.value)}
                 />
                 </div>
-                <input type="submit"  value="Add" />
           </form>
           <ul>
               {tasks.map(task => (
