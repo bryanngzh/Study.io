@@ -161,7 +161,7 @@ const NavigationBar = () => {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={ logout }>
+                <MenuItem key={setting} onClick={() => { logout(); handleCloseUserMenu(); } }>
                   <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
