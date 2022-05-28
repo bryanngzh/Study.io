@@ -79,12 +79,14 @@ const LandingPage = () => {
         columns={{ base: 1, md: 2 }}
         spacing={{ base: 10, lg: 32 }}
         py={{ base: 10, sm: 20, lg: 32 }}>
-        <Stack spacing={{ base: 10, md: 20 }}>
+        <Stack justify='center'>
           <Heading
             lineHeight={1.1}
             fontSize={{ base: '3xl', sm: '4xl', md: '5xl', lg: '6xl' }}>
             Study.io{' '}
-            <Text
+          </Heading>
+          <Heading>
+          <Text
               as={'span'}
               bgGradient="linear(to-r, red.400,pink.400)"
               bgClip="text">
@@ -224,8 +226,8 @@ const LandingPage = () => {
       </Container>
       <Blur
         position={'absolute'}
-        top={-10}
-        left={-10}
+        top={300} // -10
+        left={-10} // -10
         style={{ filter: 'blur(70px)' }}
       />
     </Box>
@@ -254,7 +256,7 @@ export const Blur = (props) => {
     <Icon
       width={useBreakpointValue({ base: '100%', md: '40vw', lg: '30vw' })}
       zIndex={useBreakpointValue({ base: -1, md: -1, lg: 0 })}
-      height="560px"
+      height="400px"
       viewBox="0 0 528 560"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
