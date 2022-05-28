@@ -10,6 +10,8 @@ import {
     Td,
     TableCaption,
     TableContainer,
+    useColorModeValue,
+    Center,
   } from '@chakra-ui/react'
 import { Checkbox, CheckboxGroup } from '@chakra-ui/react'
 import {
@@ -110,7 +112,7 @@ const Task = () => {
 
     return (
         <div>
-            <Box>
+            <Box bg={useColorModeValue('white.100', 'yellow.50')}  align={'center'} justify={'center'} w='40%' p={4} >
                 <form className="form" onSubmit={addTask}>
                     <FormControl>
                         <FormLabel>Tasks</FormLabel>
@@ -124,7 +126,7 @@ const Task = () => {
                     </FormControl>
                 </form>
                 <TableContainer>
-                    <Table variant='striped' colorScheme='blue' size="sm">
+                    <Table variant='striped' colorScheme='telegram' size="sm">
                         <Thead>
                         <Tr>
                             <Th>Completed</Th>

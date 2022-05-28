@@ -40,7 +40,7 @@ const avatars = [
   },
   {
     name: 'Christian Nwamba',
-    url: 'https://bit.ly/code-beast',
+    url: 'https://scontent.fsin5-1.fna.fbcdn.net/v/t1.18169-9/1520639_242116139290631_379303849_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=19026a&_nc_ohc=VDn5PKgsmqYAX9KfLTV&_nc_ht=scontent.fsin5-1.fna&oh=00_AT-wkVkZ0o35mWEjMLGqJrJ3r4Ao2sCaNeCoUgiZmhnJ1w&oe=62B5A5A4',
   },
 ];
 
