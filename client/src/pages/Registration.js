@@ -37,16 +37,17 @@ const Registration = () => {
         }
     })
 
+
     const registerUser = (event) => {
-        event.preventDefault()
-        axios.post("http://localhost:3001/auth", {username, email, password}).then((response) => {
-            console.log(response.data)
-            if (response.data.error) {
-                alert(response.data.error)
-            } else {
-                navigate("/")
-            }
-        })
+      event.preventDefault()
+      axios.post("http://localhost:3001/auth", {username, email, password}).then((response) => {
+        console.log(response.data)
+        if (response.data.error) {
+            alert(response.data.error)
+        } else {
+            navigate("/")
+        }
+      })
     }
 
     return (
@@ -71,8 +72,8 @@ const Registration = () => {
               p={8}>
               <Stack spacing={4}>
                 <HStack>
-                  <Box>
-                    <FormControl id="firstName" isRequired>
+                  {/* <Box> */}
+                    <FormControl id="username" isRequired>
                       <FormLabel>Username</FormLabel>
                       <Input 
                         type="text"
@@ -80,7 +81,7 @@ const Registration = () => {
                         onChange={(e) => setUsername(e.target.value)}
                       />
                     </FormControl>
-                  </Box>
+                  {/* </Box> */}
                   {/* <Box>
                     <FormControl id="lastName">
                       <FormLabel>Last Name</FormLabel>

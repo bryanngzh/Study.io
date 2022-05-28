@@ -32,6 +32,8 @@ const NavigationBar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { authState, setAuthState } = useContext(AuthContext);
+  const linkColor = useColorModeValue('gray.600', 'gray.200');
+  const linkHoverColor = useColorModeValue('gray.800', 'white');
 
   const logout = () => {
     localStorage.removeItem("accessToken")
@@ -51,8 +53,8 @@ const NavigationBar = () => {
           />
           <HStack spacing={8} alignItems={'center'}>
             <Link to={authState.status?"/dashboard":"/"}>
-              <Box boxSize='50px'>
-                <Image src='https://i.imgur.com/G6ByvaT.png' alt='Dan Abramov' />
+              <Box>
+                <Image src={ colorMode === 'light' ? 'https://i.postimg.cc/85JHBVQ5/logo-2.png' : 'https://i.postimg.cc/vHLvvzjW/image-3.png'} height='50' alt='logo' />
               </Box>
             </Link>
             <HStack
@@ -61,7 +63,15 @@ const NavigationBar = () => {
               display={{ base: 'none', md: 'flex' }}>
               {authState.status ? (
                 Links.map((link) => (
-                  <Link to={"/" + link}>{link.charAt(0).toUpperCase() + link.slice(1)}</Link>
+                  <Link
+                    fontSize={'sm'}
+                    fontWeight={500}
+                    color={linkColor}
+                    _hover={{
+                      textDecoration: 'none',
+                      color: linkHoverColor,
+                    }} 
+                    to={"/" + link}>{link.charAt(0).toUpperCase() + link.slice(1)}</Link>
                 )) 
               ) : <></>}
             </HStack>
@@ -82,7 +92,7 @@ const NavigationBar = () => {
                   <Avatar
                     size={'sm'}
                     src={
-                      'https://scontent.fsin5-1.fna.fbcdn.net/v/t1.18169-9/1520639_242116139290631_379303849_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=19026a&_nc_ohc=VDn5PKgsmqYAX9KfLTV&_nc_ht=scontent.fsin5-1.fna&oh=00_AT-wkVkZ0o35mWEjMLGqJrJ3r4Ao2sCaNeCoUgiZmhnJ1w&oe=62B5A5A4'
+                      'https://i.postimg.cc/Kjqfbv2m/Screenshot-2022-05-28-at-5-59-42-PM.png'
                     }
                   />
                 </MenuButton>
@@ -92,7 +102,7 @@ const NavigationBar = () => {
                   <Center>
                     <Avatar
                       size={'2xl'}
-                      src={'https://scontent.fsin5-1.fna.fbcdn.net/v/t1.18169-9/1520639_242116139290631_379303849_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=19026a&_nc_ohc=VDn5PKgsmqYAX9KfLTV&_nc_ht=scontent.fsin5-1.fna&oh=00_AT-wkVkZ0o35mWEjMLGqJrJ3r4Ao2sCaNeCoUgiZmhnJ1w&oe=62B5A5A4'}
+                      src={'https://i.postimg.cc/Kjqfbv2m/Screenshot-2022-05-28-at-5-59-42-PM.png'}
                     />
                   </Center>
                   <br />
@@ -101,8 +111,8 @@ const NavigationBar = () => {
                   </Center>
                   <br />
                   <MenuDivider />
-                  <MenuItem>Profile</MenuItem>
-                  <MenuItem>Account Settings</MenuItem>
+                  {/* <MenuItem>Profile</MenuItem>
+                  <MenuItem>Account Settings</MenuItem> */}
                   <MenuItem onClick={logout}>Logout</MenuItem>
                 </MenuList>
               </Menu>

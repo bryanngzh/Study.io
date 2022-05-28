@@ -1,19 +1,27 @@
 const express = require("express")
 const router = express.Router();
 const bcrypt = require("bcrypt")
-const {validateToken} = require("../middlewares/AuthMiddleware")
+const { validateToken} = require("../middlewares/AuthMiddleware")
 const { sign } = require("jsonwebtoken")
+const { check, validationResult } = require('express-validator');
 
 // Models
 const UserModel = require("../models/user")
 
 // Register
-router.post("/", async (req, res) => {
+router.post("/", [
+    check('email', 'Please include a valid email').isEmail(),
+    check('password', 'Password is required').exists()
+    ], async (req, res) => {
     const user = await UserModel.findOne({
         email: req.body.email
     })
-
-    if (!user) {
+    const errors = validationResult(req);
+    if (req.body.password.length < 1) {
+        res.json({ error: "Please enter a valid password" })
+    } else if (!errors.isEmpty()) {
+        res.json({ error: "Please enter a valid email address" });
+    } else if (!user && req.body.username.length > 0 && req.body.password.length > 0 && req.body.email.length > 0) {
         bcrypt.hash(req.body.password, 10).then((hash) => {
             UserModel.create({
                 username: req.body.username,
@@ -22,10 +30,12 @@ router.post("/", async (req, res) => {
             })
         })
         res.json("SUCCESS")
+    } else if (user) {
+        res.json({ error: "User is already registered" })
     } else {
-        res.json("Email address is already in use")
+        res.json({ error: "Please enter a valid username" })
     }
-    
+
 })
 
 // Login
@@ -39,7 +49,7 @@ router.post("/login", async (req, res) => {
     } else {
         bcrypt.compare(req.body.password, user.password).then((match) => {
             if (!match) {
-                res.json({ error: "Wrong Username and Password Combination" })
+                res.json({ error: "Please enter a valid password" })
             } else {
                 const accessToken = sign({username: user.username, 
                     email: user.email, id: user.id}, "secret")
