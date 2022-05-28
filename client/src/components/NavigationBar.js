@@ -82,7 +82,7 @@ const NavigationBar = () => {
                   <Avatar
                     size={'sm'}
                     src={
-                      'https://media-exp1.licdn.com/dms/image/C4E03AQHwlfUhM7x8RA/profile-displayphoto-shrink_200_200/0/1621594176290?e=1658966400&v=beta&t=hWt-GG3mf4Ds_BIKuGsOfgOqs81wJQtCW-r6hSZwAoU'
+                      'https://scontent.fsin5-1.fna.fbcdn.net/v/t1.18169-9/1520639_242116139290631_379303849_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=19026a&_nc_ohc=VDn5PKgsmqYAX9KfLTV&_nc_ht=scontent.fsin5-1.fna&oh=00_AT-wkVkZ0o35mWEjMLGqJrJ3r4Ao2sCaNeCoUgiZmhnJ1w&oe=62B5A5A4'
                     }
                   />
                 </MenuButton>
@@ -92,7 +92,7 @@ const NavigationBar = () => {
                   <Center>
                     <Avatar
                       size={'2xl'}
-                      src={'https://media-exp1.licdn.com/dms/image/C4E03AQHwlfUhM7x8RA/profile-displayphoto-shrink_200_200/0/1621594176290?e=1658966400&v=beta&t=hWt-GG3mf4Ds_BIKuGsOfgOqs81wJQtCW-r6hSZwAoU'}
+                      src={'https://scontent.fsin5-1.fna.fbcdn.net/v/t1.18169-9/1520639_242116139290631_379303849_n.jpg?_nc_cat=109&ccb=1-7&_nc_sid=19026a&_nc_ohc=VDn5PKgsmqYAX9KfLTV&_nc_ht=scontent.fsin5-1.fna&oh=00_AT-wkVkZ0o35mWEjMLGqJrJ3r4Ao2sCaNeCoUgiZmhnJ1w&oe=62B5A5A4'}
                     />
                   </Center>
                   <br />
