@@ -16,9 +16,9 @@ const UserModel = require("./models/user")
 
 // Routes
 const userRoute = require("./routes/User")
-app.use("/auth", userRoute)
+app.use("/api/auth", userRoute)
 const taskRoute = require("./routes/Task")
-app.use("/task", taskRoute)
+app.use("/api/task", taskRoute)
 
 // Production
 if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging") {

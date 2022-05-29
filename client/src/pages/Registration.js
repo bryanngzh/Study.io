@@ -40,7 +40,7 @@ const Registration = () => {
 
     const registerUser = (event) => {
       event.preventDefault()
-      axios.post("http://localhost:3001/auth", {username, email, password}).then((response) => {
+      axios.post("http://localhost:3001/api/auth", {username, email, password}).then((response) => {
         console.log(response.data)
         if (response.data.error) {
             alert(response.data.error)
