@@ -28,7 +28,7 @@ if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging")
     });
    }
 
-const port = process.env.PORT || '5000'
+const port = process.env.PORT || '3001'
 
 //Needs this at the start, BE server runs on port 3001, then FE runs on 3000
 app.listen(port, () => {
