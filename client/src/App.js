@@ -41,7 +41,7 @@ function App() {
           <NavigationBar />
           <Routes>
             <Route path="/" exact element={ <LandingPage />} />
-            <Route path="/registration" exact element={<Registration />} />
+            <Route path="/registration" exact element={<LandingPage />} />
             <Route path="/dashboard" exact element={ <Dashboard />  } />
           </Routes>
         </BrowserRouter>
