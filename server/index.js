@@ -5,7 +5,7 @@ const mongoose = require("mongoose")
 const cors = require("cors")
 
 // MongoDB
-mongoose.connect("") 
+mongoose.connect("mongodb+srv://bryan:bryan@cluster0.fmdfb.mongodb.net/studyio?retryWrites=true&w=majority") 
 
 // Middleware
 app.use(express.json()) // to allow json change to parse for API calls
