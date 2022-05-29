@@ -33,7 +33,7 @@ const Task = () => {
 
     useEffect(() => {
         if (localStorage.getItem("accessToken")) {
-            axios.get("http://localhost:3001/api/task", {
+            axios.get("/api/task", {
                 headers: {
                     accessToken: localStorage.getItem("accessToken")
                 },
@@ -51,7 +51,7 @@ const Task = () => {
         
         event.preventDefault()
         if (inputVal.length > 0) {
-            axios.post("http://localhost:3001/api/task/addTask", {
+            axios.post("/api/task/addTask", {
             text: inputVal, completed: false,
             }, {
                 headers: {
@@ -72,7 +72,7 @@ const Task = () => {
     }
 
     const toggleTask = (event) => {
-        axios.post("http://localhost:3001/api/task/toggle", {
+        axios.post("/api/task/toggle", {
             _id: event._id, completed: !event.completed,
         }, {
             headers: {
@@ -94,7 +94,7 @@ const Task = () => {
     }
 
     const deleteTask = (event) => {
-        axios.post("http://localhost:3001/api/task/deleteTask", {
+        axios.post("/api/task/deleteTask", {
             _id: event._id, 
         }, {
             headers: {
