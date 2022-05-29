@@ -14,6 +14,8 @@ app.use(cors()); // to connect FE to BE
 // Models
 const UserModel = require("./models/user")
 
+var path = require('path');
+
 // Routes
 const userRoute = require("./routes/User")
 app.use("/api/auth", userRoute)
