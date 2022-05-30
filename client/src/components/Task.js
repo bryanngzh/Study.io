@@ -61,7 +61,8 @@ const Task = () => {
                 if (response.data.error) {
                     alert(response.data.error)
                 } else {
-                    setTasks([...tasks, response.data])
+                    // setTasks([...tasks, response.data])
+                    setTasks([...tasks])
                     setInputVal("")
                 }
             })
@@ -149,8 +150,8 @@ const Task = () => {
                                 <Tr>
                                     <>
                                     <Td>
-                                        <Box onClick={() => toggleTask(task)}>
-                                            <Checkbox defaultChecked isChecked={task.completed}>{task.completed ? <del>{task.text}</del> : task.text} </Checkbox>
+                                        <Box>
+                                            <Checkbox onChange={() => toggleTask(task)} isChecked={task.completed}>{task.completed ? <del>{task.text}</del> : task.text} </Checkbox>
                                         </Box>
                                     </Td>
                                     <Td isNumeric>
