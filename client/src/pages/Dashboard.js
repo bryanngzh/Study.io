@@ -1,4 +1,5 @@
 import Task from "../components/Task";
+import Timetable from "../components/Timetable";
 import { useState, useContext, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../helpers/AuthContext";
@@ -33,7 +34,8 @@ const Dashboard = () => {
     <>
       <VStack spacing={10} padding='10px'>
         {/* <Heading size="md">Welcome back, {authState.username.toUpperCase()}</Heading> */}
-        <FeatureTask />
+        <Timetable />
+        <FeatureTask />      
       </VStack>
       
     </>
