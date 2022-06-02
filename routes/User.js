@@ -1,14 +1,12 @@
 const express = require("express")
 const router = express.Router();
 const bcrypt = require("bcrypt")
-const { validateToken} = require("../middlewares/AuthMiddleware")
+const { validateToken } = require("../middlewares/AuthMiddleware")
 const { sign } = require("jsonwebtoken")
 const { check, validationResult } = require('express-validator');
 
 // Models
 const UserModel = require("../models/user");
-const { update } = require("../models/user");
-const { useResolvedPath } = require("react-router-dom");
 
 // Register
 router.post("/", [
