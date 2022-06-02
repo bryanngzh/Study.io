@@ -7,8 +7,6 @@ const { check, validationResult } = require('express-validator');
 
 // Models
 const UserModel = require("../models/user");
-const { update } = require("../models/user");
-const { useResolvedPath } = require("react-router-dom");
 
 // Register
 router.post("/", [
