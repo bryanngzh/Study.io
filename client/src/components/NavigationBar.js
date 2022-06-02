@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../helpers/AuthContext';
 import { ReactNode } from 'react';
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Flex,
@@ -34,6 +35,8 @@ const NavigationBar = () => {
   const { authState, setAuthState } = useContext(AuthContext);
   const linkColor = useColorModeValue('gray.600', 'gray.200');
   const linkHoverColor = useColorModeValue('gray.800', 'white');
+
+  let navigate = useNavigate();
 
   const logout = () => {
     localStorage.removeItem("accessToken")
@@ -111,8 +114,8 @@ const NavigationBar = () => {
                   </Center>
                   <br />
                   <MenuDivider />
-                  {/* <MenuItem>Profile</MenuItem>
-                  <MenuItem>Account Settings</MenuItem> */}
+                  <MenuItem onClick={() => navigate("/profile") }>Profile</MenuItem>
+                  {/* <MenuItem>Account Settings</MenuItem> */}
                   <MenuItem onClick={logout}>Logout</MenuItem>
                 </MenuList>
               </Menu>
