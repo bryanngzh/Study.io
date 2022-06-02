@@ -4,6 +4,7 @@ import Registration from "./pages/Registration"
 import Dashboard from "./pages/Dashboard"
 import LandingPage from './pages/LandingPage';
 import NavigationBar from './components/NavigationBar';
+import Profile from "./pages/Profile";
 import { AuthContext } from "./helpers/AuthContext";
 import { useState, useEffect } from 'react'
 import axios from 'axios'
@@ -42,7 +43,8 @@ function App() {
           <Routes>
             <Route path="/" exact element={ <LandingPage />} />
             <Route path="/register" exact element={<Registration />} />
-            <Route path="/dashboard" exact element={ <Dashboard />  } />
+            <Route path="/dashboard" exact element={<Dashboard />} />
+            <Route path="/profile" exact element={<Profile />} />
           </Routes>
         </BrowserRouter>
       </AuthContext.Provider>

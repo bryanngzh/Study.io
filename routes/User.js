@@ -6,7 +6,9 @@ const { sign } = require("jsonwebtoken")
 const { check, validationResult } = require('express-validator');
 
 // Models
-const UserModel = require("../models/user")
+const UserModel = require("../models/user");
+const { update } = require("../models/user");
+const { useResolvedPath } = require("react-router-dom");
 
 // Register
 router.post("/", [
@@ -60,6 +62,43 @@ router.post("/login", async (req, res) => {
     
 })
 
+//Update User Password
+router.post("/updatePassword", validateToken, async (req, res) => {
+    const { oldPassword, newPassword } = req.body;
+    const user = await UserModel.findOne({
+            email: req.user.email
+    })
+
+    bcrypt.compare(oldPassword, user.password).then(async (match) => {
+        if (!match) {
+            res.json({ error: "Wrong Password Entered!" });
+        } else {
+            bcrypt.hash(newPassword, 10).then((hash) => {
+                UserModel.findByIdAndUpdate(req.user.id, {password: hash}).exec()
+                res.json("SUCCESS")
+            })
+        }    
+    })
+})
+
+//Update username
+router.post("/updateUsername", validateToken, async (req, res) => {
+    const { Password, newUsername } = req.body;
+    const user = await UserModel.findOne({
+        email: req.user.email
+    })
+
+    bcrypt.compare(Password, user.password).then(async (match) => {
+        if (!match) {
+            res.json({ error: "Wrong Password Entered!" });
+        } else {
+            UserModel.findByIdAndUpdate(req.user.id, {username: newUsername}).exec()
+            res.json("SUCCESS")
+        }   
+    })
+})
+
+//auth state
 router.get('/auth', validateToken, (req, res) => {
     res.json(req.user)
 })
