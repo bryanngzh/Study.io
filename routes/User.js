@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router();
 const bcrypt = require("bcrypt")
-const { validateToken} = require("../middlewares/AuthMiddleware")
+const { validateToken } = require("../middlewares/AuthMiddleware")
 const { sign } = require("jsonwebtoken")
 const { check, validationResult } = require('express-validator');
 
