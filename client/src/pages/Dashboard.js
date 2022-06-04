@@ -4,7 +4,7 @@ import { useState, useContext, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../helpers/AuthContext";
 import { Heading } from '@chakra-ui/react'
-import { Stack, HStack, VStack } from '@chakra-ui/react'
+import { Stack, HStack, VStack, StackDivider} from '@chakra-ui/react'
 import { Box, Text } from '@chakra-ui/react'
 
 
@@ -30,14 +30,28 @@ const Dashboard = () => {
     )
   }
 
+  function FeatureTimetable({ title, desc, display, ...rest }) {
+    return (
+      
+      <Box p={5} shadow='md' borderWidth='1px' width='80%' {...rest}  >
+        <Timetable/>
+        <Heading fontSize='xl'>{title}</Heading>
+        <Text mt={4}>{desc}</Text>
+        </Box>
+        
+    )
+  }
+
   return (
     <>
-      <VStack spacing={10} padding='10px'>
+      
+      <VStack spacing={10} padding='10px'divider={<StackDivider borderColor='gray.200' />}
+  >
         {/* <Heading size="md">Welcome back, {authState.username.toUpperCase()}</Heading> */}
         <Timetable />
         <FeatureTask />      
       </VStack>
-      
+     
     </>
     
   )
