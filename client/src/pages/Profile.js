@@ -135,7 +135,8 @@ const Profile = () => {
               </Avatar>
             </Center>
             <Center w="full">
-              <Button w="full">Change Icon</Button>
+              {/* <Button w="full" >Change Icon</Button> */}
+              <input type="file" />
             </Center>
           </Stack>
         </FormControl>
