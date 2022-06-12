@@ -28,10 +28,6 @@ import {
   Stack,
   ButtonGroup,
   Select,
-  Slider,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderTrack,
   Drawer,
   DrawerBody,
   DrawerFooter,
@@ -41,17 +37,12 @@ import {
   DrawerCloseButton,
   useDisclosure,
   Input,
-  InputGroup,
-  InputLeftAddon,
-  InputRightAddon,
   Textarea,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
-  NumberIncrementStepper,
-  NumberDecrementStepper,
 } from '@chakra-ui/react'
 import { useState, useEffect } from 'react';
+import axios from "axios"
+import { SettingsIcon } from '@chakra-ui/icons'
+import Nusmods from './Nusmods';
 
 const Timetable = () => {
 
@@ -79,8 +70,7 @@ const Timetable = () => {
   //color settings
   const evenColor = useColorModeValue("gray.100", "gray.600");
   const oddColor = useColorModeValue("gray.200", "gray.700");
-  const evenColorOverlay = useColorModeValue("gray.50", "gray.500");
-  const oddColorOverlay = useColorModeValue("gray.150", "gray.650");
+  const overlayColors = ['gray.500','blue','yellow.200','green.200','red.200','orange','teal','pink'];
 
   //weekend and time toggle settings
   const [weekend, setWeekend] = useState(false);
@@ -89,25 +79,56 @@ const Timetable = () => {
   //default drawer settings
   const [drawerDay, setDrawerDay] = useState(0);
   const [drawerTime, setDrawerTime] = useState(0);
+  const [drawerEndTime, setDrawerEndTime] = useState(0);
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   //additional drawer settings for input
-
+  //i think for the colour part
   
   //number of rows for timetable
-  const [mon, setMon] = useState(1);
-  const [tue, setTue] = useState(1);
-  const [wed, setWed] = useState(1);
-  const [thu, setThu] = useState(1);
-  const [fri, setFri] = useState(1);
-  const [sat, setSat] = useState(1);
-  const [sun, setSun] = useState(1);
+  // const [mon, setMon] = useState(1);
+  // const [tue, setTue] = useState(1);
+  // const [wed, setWed] = useState(1);
+  // const [thu, setThu] = useState(1);
+  // const [fri, setFri] = useState(1);
+  // const [sat, setSat] = useState(1);
+  // const [sun, setSun] = useState(1);
+  var mon = 1;
+  var tue = 1; 
+  var wed = 1;
+  var thu = 1;
+  var fri = 1;
+  var sat = 1;
+  var sun = 1;
+  const dayStates = [mon, tue, wed, thu, fri, sat, sun];
 
+  //to get timetable info from BE
+  const [items, setItems] = useState([])
+
+  useEffect(() => {
+    if (localStorage.getItem("accessToken")) {
+        axios.get("/api/timetable/info", {
+            headers: {
+                accessToken: localStorage.getItem("accessToken")
+            },
+        }).then((response) => {
+        if (response.data.error) {
+            alert(response.data.error)
+        } else {
+            setItems(response.data)
+        }
+    })
+    }
+  }, [items])
+
+  //set drawer settings for overlay button
   const setDrawerSettings = (i,j) => {
     setDrawerDay(i);
     setDrawerTime(j);
+    setDrawerEndTime(j + 6);
   }
   
+  //make background for timetable that is adjustable based on number of rows
   const makeBoxes = (i, multiplier) => {
     const boxes = [];
     const height = multiplier * 80 + (multiplier - 1) * 3.5 + "px"
@@ -115,7 +136,7 @@ const Timetable = () => {
       if (j === 0) {
         boxes.push(<Center bg={oddColor} height={height}>{days[i]}</Center>)
       } else {
-        boxes.push(<Center bg={j % 2 === 0 ? oddColor : evenColor} height={height}>{height}</Center>)
+        boxes.push(<Center bg={j % 2 === 0 ? oddColor : evenColor} height={height}></Center>)
       }
     }
     return boxes;
@@ -129,11 +150,10 @@ const Timetable = () => {
         role="button" id={days[i] + j}
         onClick={() => { onOpen(); setDrawerSettings(i,j)}}
         colSpan={1}
-        opacity={0.4}
+        opacity={0}
         bg='yellow.50'
         rounded='md'
         height={20}>
-        {j}
       </GridItem>)
     }
     return boxes;
@@ -182,11 +202,161 @@ const Timetable = () => {
     }
   }  
 
-  const changeSize = () => {
-    mondayOverlay[7] = <GridItem role="button" colSpan={3} opacity={0.5} bg='yellow.50' rounded='md' height={20}>1</GridItem>
-    mondayOverlay[8] = <></>
-    mondayOverlay[9] = <></>;
+  //delete activity
+  const deleteActivity = (event) => {
+      axios.post("/api/timetable/delete", {
+        _id: event._id, 
+    }, {
+        headers: {
+            accessToken: localStorage.getItem("accessToken")
+        },
+    }).then((response) => {
+        if (response.data.error) {
+            alert(response.data.error)
+        } else {
+            setItems([...items])
+        }
+    })
   }
+
+  const overlaysOne = [mondayOverlay, tuesdayOverlay, wednesdayOverlay, thursdayOverlay, fridayOverlay, saturdayOverlay, sundayOverlay];
+  const overlaysTwo = [mondayOverlay1, tuesdayOverlay1, wednesdayOverlay1, thursdayOverlay1, fridayOverlay1, saturdayOverlay1, sundayOverlay1];
+  const overlaysThree = [mondayOverlay2, tuesdayOverlay2, wednesdayOverlay2, thursdayOverlay2, fridayOverlay2, saturdayOverlay2, sundayOverlay2];
+  const overlays = [overlaysOne, overlaysTwo, overlaysThree];
+  const empty = <></>;
+
+  //using array overlap to fill in the activity block 
+  const addActivity = (item) => {
+    const startLimit = startTime * 6;
+    var start = item.startTime;
+    var end = item.endTime;
+    var length = 0;
+    if (start > end) {
+      length = 144 - start + end;
+    } else {
+      length = end - start;
+    }
+    var temp = [];
+    for (let i = start; i < start + length; i++) {
+      temp[i % 144] = 1;
+    }
+    var first = -1;
+    var finalLength = 0;
+    //need to check for gap in array 
+    for (let i = startLimit; i < startLimit + 90; i++) {
+      if (temp[i % 144] === 1) {
+        if (first === -1) {
+          first = i%144;
+        }
+        finalLength++;
+      }
+    }
+    var firstRow = true;
+    var secondRow = true;
+    var thirdRow = true;
+    var row = -1;
+    //have to figure out how to shift to 2nd row!!!
+    for (let i = first; i <= first + finalLength; i++) {
+      if (overlays[0][item.day][i % 144] === empty) {
+        firstRow = false;
+      }
+      if (overlays[1][item.day][i % 144] === empty) {
+        secondRow = false;
+      }
+      if (overlays[2][item.day][i % 144] === empty) {
+        thirdRow = false;
+      }
+    }
+    if (firstRow) {
+      row = 0;
+    } else if (secondRow) {
+      row = 1;
+      if (item.day === 0) {
+        mon = Math.max(2, mon);
+      } else if (item.day === 1) {
+        tue = Math.max(2, tue);;
+      } else if (item.day === 2) {
+        wed = Math.max(2, wed);;
+      } else if (item.day === 3) {
+        thu = Math.max(2, thu);;
+      } else if (item.day === 4) {
+        fri = Math.max(2, fri);;
+      } else if (item.day === 5) {
+        sat = Math.max(2, sat);;
+      } else if (item.day === 6) {
+        sun = Math.max(2, sun);;
+      }
+    } else if (thirdRow) {
+      row = 2;
+      if (item.day === 0) {
+        mon = 3
+      } else if (item.day === 1) {
+        tue = 3;
+      } else if (item.day === 2) {
+        wed = 3;
+      } else if (item.day === 3) {
+        thu = 3;
+      } else if (item.day === 4) {
+        fri = 3;
+      } else if (item.day === 5) {
+        sat = 3;
+      } else if (item.day === 6) {
+        sun = 3;
+      }
+    }
+
+    if (row >= 0) {
+      const arr = overlays[row][item.day];
+      arr[first] =
+        <Popover>
+          <PopoverTrigger>
+            <GridItem
+              role="button" colSpan={finalLength}
+              boxShadow='md'
+              bg={overlayColors[item.colour]} color="black" rounded='md' height={20}
+            >
+              <Text fontSize='sm'>{finalLength > 4 ? item.name : ""}</Text>
+              <Text fontSize='xs'>{finalLength > 4 ? item.location : ""}</Text>
+              <Text fontSize='xs'>{finalLength > 4 ? item.frequency : ""}</Text>
+            </GridItem>
+          </PopoverTrigger>
+          <PopoverContent color='white' bg='blue.800' borderColor='blue.800'>
+        <PopoverHeader pt={4} fontWeight='bold' border='0'>
+          {item.name}
+        </PopoverHeader>
+        <PopoverArrow />
+        <PopoverCloseButton />
+        <PopoverBody>
+          <Text fontSize='xs'>{item.code}</Text>
+          <Text fontSize='xs'>{item.location}</Text>
+          <Text fontSize='xs'>{item.frequency}</Text>
+          <Text fontSize='xs'>{item.additionalInfo}</Text>
+        </PopoverBody>
+        <PopoverFooter
+          border='0'
+          display='flex'
+          alignItems='center'
+          justifyContent='space-between'
+          pb={4}
+        >
+          <Box fontSize='sm'></Box>
+          <ButtonGroup size='sm'>
+            <Button colorScheme='green'>Edit</Button>
+            <Button colorScheme='red' onClick={() => deleteActivity(item)}>
+              Delete
+            </Button>
+          </ButtonGroup>
+        </PopoverFooter>
+      </PopoverContent>
+    </Popover>
+      for (let i = first + 1; i < first + finalLength; i++) {
+        arr[i % 144] = empty;
+      }
+    }
+  }
+
+  //function used to display all the items!
+  items.map(item => {return(addActivity(item))})
 
   //responsive timing changes
   const makeTiming = (start) => {
@@ -205,7 +375,6 @@ const Timetable = () => {
     } else {
       setStartTime(0)
     }
-    
   }
 
   //function to make all the timings available
@@ -217,9 +386,50 @@ const Timetable = () => {
     return box;
   }
 
-  const toggleMon = () => {
-    setSat(1);
+  //functionality to add items to the timetable
+  const [activityName, setActivityName] = useState("");
+  const [activityLocation, setActivityLocation] = useState("");
+  const [activityFrequency, setActivityFrequency] = useState("");
+  const [activityInfo, setActivityInfo] = useState("");
+  const [activityColour, setActivityColour] = useState(0);
+
+  let handleInfoChange = (e) => {
+    let inputValue = e.target.value;
+    setActivityInfo(inputValue);
   }
+
+  const addTimetableActivity = () => {
+    if (activityName.length > 0) {
+      axios.post("/api/timetable/add", {
+        name: activityName,
+        day: drawerDay,
+        startTime: drawerTime,
+        endTime: drawerEndTime,
+        location: activityLocation,
+        frequency: activityFrequency,
+        additionalInfo: activityInfo,
+        colour: activityColour,
+      }, {
+        headers: {
+          accessToken: localStorage.getItem("accessToken")
+        },
+      }).then((response) => {
+        if (response.data.error) {
+          alert(response.data.error)
+        } else {
+          setItems([...items])
+          setActivityName("");
+          setActivityFrequency("");
+          setActivityInfo("");
+          setActivityLocation("");
+          setActivityColour(0);
+        }
+      })
+      onClose();
+    } else {
+      alert("Please input a name!")
+    }
+  } 
   
   return (
     <Container overflowX="auto" overflowY="auto" minWidth = "1600">
@@ -263,39 +473,52 @@ const Timetable = () => {
           <SimpleGrid columns={96} spacing={1}>
             <GridItem colSpan={6} opacity={0} height={20}></GridItem>
             {makeDisplay(mondayOverlay)}
+            {mon >= 2 ? <GridItem colSpan={6} opacity={0} height={20}></GridItem> : <></>}
             {mon >= 2 ? makeDisplay(mondayOverlay1) : <></>}
+            {mon >= 3 ? <GridItem colSpan={6} opacity={0} height={20}></GridItem> : <></>}
             {mon >= 3 ? makeDisplay(mondayOverlay2) : <></>}
-            {/* {changeSize()} */}
             
-            <GridItem colSpan={6} opacity={0} height={20}></GridItem>
+            <GridItem colSpan={6} opacity={0} height={20} ></GridItem>
             {makeDisplay(tuesdayOverlay)}
+            {tue >= 2 ? <GridItem colSpan={6} opacity={0} height={20}></GridItem> : <></>}
             {tue >= 2 ? makeDisplay(tuesdayOverlay1) : <></>}
+            {tue >= 3 ? <GridItem colSpan={6} opacity={0} height={20}></GridItem> : <></>}
             {tue >= 3 ? makeDisplay(tuesdayOverlay2) : <></>}  
             
             <GridItem colSpan={6} opacity={0} height={20}></GridItem>
             {makeDisplay(wednesdayOverlay)}
+            {wed >= 2 ? <GridItem colSpan={6} opacity={0} height={20}></GridItem> : <></>}
             {wed >= 2 ? makeDisplay(wednesdayOverlay1) : <></>}
+            {wed >= 3 ? <GridItem colSpan={6} opacity={0} height={20}></GridItem> : <></>}
             {wed >= 3 ? makeDisplay(wednesdayOverlay2) : <></>}
             
             <GridItem colSpan={6} opacity={0} height={20}></GridItem>
             {makeDisplay(thursdayOverlay)}
+            {thu >= 2 ? <GridItem colSpan={6} opacity={0} height={20}></GridItem> : <></>}
             {thu >= 2 ? makeDisplay(thursdayOverlay1) : <></>}
+            {thu >= 3 ? <GridItem colSpan={6} opacity={0} height={20}></GridItem> : <></>}
             {thu >= 3 ? makeDisplay(thursdayOverlay2) : <></>}
 
             <GridItem colSpan={6} opacity={0} height={20}></GridItem>
             {makeDisplay(fridayOverlay)}
+            {fri >= 2 ? <GridItem colSpan={6} opacity={0} height={20}></GridItem> : <></>}
             {fri >= 2 ? makeDisplay(fridayOverlay1) : <></>}
+            {fri >= 3 ? <GridItem colSpan={6} opacity={0} height={20}></GridItem> : <></>}
             {fri >= 3 ? makeDisplay(fridayOverlay2) : <></>}
             
             {weekend ? <GridItem colSpan={6} opacity={0} height={20}></GridItem> : <></>}
             {weekend ? makeDisplay(saturdayOverlay) : <></>}
+            {weekend ? sat >= 2 ? <GridItem colSpan={6} opacity={0} height={20}></GridItem> : <></> : <></>}
             {weekend ? sat >= 2 ? makeDisplay(saturdayOverlay1) : <></> : <></>}
+            {weekend ? sat >= 3 ? <GridItem colSpan={6} opacity={0} height={20}></GridItem> : <></> : <></>}
             {weekend ? sat >= 3 ? makeDisplay(saturdayOverlay2) : <></> : <></>}
 
             
             {weekend ? <GridItem colSpan={6} opacity={0} height={20}></GridItem> : <></>}
             {weekend ? makeDisplay(sundayOverlay) : <></>}
+            {weekend ? sun >= 2 ? <GridItem colSpan={6} opacity={0} height={20}></GridItem> : <></> : <></>}
             {weekend ? sun >= 2 ? makeDisplay(sundayOverlay1) : <></> : <></>}
+            {weekend ? sun >= 3 ? <GridItem colSpan={6} opacity={0} height={20}></GridItem> : <></> : <></>}
             {weekend ? sun >= 3 ? makeDisplay(sundayOverlay2) : <></> : <></>}
           </SimpleGrid>    
         </Container>
@@ -310,8 +533,9 @@ const Timetable = () => {
             <Button colorScheme='teal' variant='solid' onClick={toggleWeekend}>
               Toggle Weekend
             </Button>
-            <Button colorScheme='orange' variant='solid' onClick={toggleMon} >
-              NUSMODS
+            <Nusmods />
+            <Button colorScheme='blue' variant='solid' >
+              <SettingsIcon />
             </Button>
           </ButtonGroup>
       </Stack>
@@ -323,28 +547,30 @@ const Timetable = () => {
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>Add activity!</DrawerHeader>
+          <DrawerHeader>Add an activity!</DrawerHeader>
 
           <DrawerBody>
-            <Stack spacing='24px'>
+            <Stack spacing='10px'>
               <Box>
                 <FormLabel htmlFor='username'>Name</FormLabel>
                 <Input
                   id='username'
                   placeholder='Please enter the activity'
+                  value = {activityName}
+                  onChange={(e) => setActivityName(e.target.value)}
                 />
               </Box>
               
               <Box>
                 <FormLabel htmlFor='owner'>Day</FormLabel>
-                <Select id='owner' defaultValue={days[drawerDay]}>
-                  <option value={days[0]}>Monday</option>
-                  <option value={days[1]}>Tuesday</option>
-                  <option value={days[2]}>Wednesday</option>
-                  <option value={days[3]}>Thursday</option>
-                  <option value={days[4]}>Friday</option>
-                  <option value={days[5]}>Saturday</option>
-                  <option value={days[6]}>Sunday</option>
+                <Select id='owner' value={drawerDay} onChange={(e) => setDrawerDay(e.target.value)}>
+                  <option value={0}>Monday</option>
+                  <option value={1}>Tuesday</option>
+                  <option value={2}>Wednesday</option>
+                  <option value={3}>Thursday</option>
+                  <option value={4}>Friday</option>
+                  <option value={5}>Saturday</option>
+                  <option value={6}>Sunday</option>
                 </Select>
               </Box>
 
@@ -353,33 +579,55 @@ const Timetable = () => {
                 <FormLabel htmlFor='owner'>End time</FormLabel>
               </Stack>
 
-              <Stack direction='row' position="relative" top="-25px">
-                <Select id='startTime' defaultValue={drawerTime}>
+              <Stack direction='row' position="relative" top="-15px">
+                <Select id='startTime' value={drawerTime} onChange={(e) => setDrawerTime(e.target.value)}>
                   {makeDetailedTiming()}
                 </Select>
-                <Select id='endTime' defaultValue={drawerTime + 6}>
+                <Select id='endTime' defaultValue={drawerEndTime} onChange={(e) => setDrawerEndTime(e.target.value)}>
                   {makeDetailedTiming()}
                 </Select>
               </Stack>
 
-              <Box position="relative" top="-25px">
+              <Box position="relative" top="-15px">
                 <FormLabel htmlFor='username'>Location</FormLabel>
                 <Input
-                  id='username'
+                  id='location'
                   placeholder='Optional'
+                  value={activityLocation}
+                  onChange = {(e) => setActivityLocation(e.target.value)}
                 />
               </Box>
-              <Box position="relative" top="-25px">
+              <Box position="relative" top="-15px">
                 <FormLabel htmlFor='username'>Frequency</FormLabel>
                 <Input
-                  id='username'
+                  id='frequency'
                   placeholder='Optional'
+                  value={activityFrequency}
+                  onChange = {(e) => setActivityFrequency(e.target.value)}
                 />
               </Box>
               <Box>
                 <FormLabel htmlFor='desc'>Additional Description</FormLabel>
-                <Textarea id='desc' />
+                <Textarea
+                  id='desc'
+                  placeholder='Optional'
+                  value={activityInfo}
+                  onChange={handleInfoChange}
+                />
               </Box>
+              <Stack>
+              <FormLabel htmlFor='desc'>Colour:</FormLabel>
+              </Stack>
+                <Select id='owner' value={activityColour} onChange={(e) => setActivityColour(e.target.value)}>
+                  <option value={0}>Gray</option>
+                  <option value={1}>Blue</option>
+                  <option value={2}>Yellow</option>
+                  <option value={3}>Green</option>
+                  <option value={4}>Red</option>
+                  <option value={5}>Orange</option>
+                  <option value={6}>Teal</option>
+                  <option value={7}>Pink</option>
+                </Select>
             </Stack>
           </DrawerBody>
 
@@ -387,7 +635,7 @@ const Timetable = () => {
             <Button variant='outline' mr={3} onClick={onClose}>
               Cancel
             </Button>
-            <Button colorScheme='blue'>Save</Button>
+            <Button colorScheme='blue' onClick={addTimetableActivity}>Save</Button>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

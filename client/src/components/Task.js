@@ -31,6 +31,7 @@ const Task = () => {
     const [inputVal, setInputVal] = useState("")
     const [tasks, setTasks] = useState([])
 
+    //can consider removing the [tasks] as it spams the console.
     useEffect(() => {
         if (localStorage.getItem("accessToken")) {
             axios.get("/api/task", {

@@ -4,14 +4,31 @@ const { validateToken } = require("../middlewares/AuthMiddleware")
 const mongoose = require("mongoose")
 
 const TimetableModel = require("../models/timetable");
-const { request } = require("express");
 
-//Initialise Timetable
-router.post("/start", validateToken, async (req, res) => { 
+//add activity to timetable
+router.post("/add", validateToken, async (req, res) => { 
   TimetableModel.create({
-    email: req.user.email
+    email: req.user.email,
+    name: req.body.name,
+    day: req.body.day,
+    startTime: req.body.startTime,
+    endTime: req.body.endTime,
+    location: req.body.location,
+    frequency: req.body.frequency,
+    additionalInfo: req.body.additionalInfo,
+    colour: req.body.colour,
   })
   res.json("SUCCESS")
+})
+
+//delete activity from timetable
+router.post("/delete", validateToken, async (req, res) => {
+  try {
+      await TimetableModel.findByIdAndRemove(req.body._id).exec()
+      res.json("SUCCESS")
+  } catch (error) {
+      res.json("ERROR")
+  }
 })
 
 //Change timetable info
@@ -49,12 +66,11 @@ router.get("/info", validateToken, async (req, res) => {
   const email = req.user.email
   TimetableModel.where({ email: email }).find((err, data) => {
     if (data) {
-      data.filter()
         res.json(data)
     } else {
         res.json("Unable to show data")
     }
-})
+  })
 })
 
 module.exports = router
