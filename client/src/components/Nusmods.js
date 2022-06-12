@@ -54,7 +54,7 @@ const Nusmods = () => {
     }
   }
 
-  const addTimetableActivity = (name, day, start, end, location, frequency, colour) => {
+  const addTimetableActivity = (name, day, start, end, location, frequency, colour, code) => {
       axios.post("/api/timetable/add", {
         name: name,
         day: day,
@@ -63,6 +63,8 @@ const Nusmods = () => {
         location: location,
         frequency: frequency,
         colour: colour,
+        code: code,
+        nusmods: true,
       }, {
         headers: {
           accessToken: localStorage.getItem("accessToken")
@@ -103,7 +105,7 @@ const Nusmods = () => {
     const String = "https://api.nusmods.com/v2/2021-2022/modules/" + moduleName + ".json";
     const response = await fetch(String);
     const data = await response.json();
-    const colour = Math.floor(Math.random(0,9));
+    const colour = Math.floor(Math.random()*7);
     for (let i = 1; i < arr.length; i++) {
       const modInfo = arr[i].split(":");
       const jsonInfo = data.semesterData[sem].timetable
@@ -115,7 +117,8 @@ const Nusmods = () => {
         const location = jsonInfo[i].venue;
         const frequency = "Weeks [" + jsonInfo[i].weeks + "]";
         const day = days.indexOf(jsonInfo[i].day);
-        addTimetableActivity(moduleName, day, startTime, endTime, location, frequency, colour)
+        const code = modInfo[0] + " [" + modInfo[1] + "]"
+        addTimetableActivity(moduleName, day, startTime, endTime, location, frequency, colour, code)
       }
     }
   }

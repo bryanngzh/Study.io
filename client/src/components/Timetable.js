@@ -43,6 +43,7 @@ import { useState, useEffect } from 'react';
 import axios from "axios"
 import { SettingsIcon } from '@chakra-ui/icons'
 import Nusmods from './Nusmods';
+import TimetableSettings from './TimetableSettings';
 
 const Timetable = () => {
 
@@ -409,6 +410,7 @@ const Timetable = () => {
         frequency: activityFrequency,
         additionalInfo: activityInfo,
         colour: activityColour,
+        nusmods: false,
       }, {
         headers: {
           accessToken: localStorage.getItem("accessToken")
@@ -534,9 +536,7 @@ const Timetable = () => {
               Toggle Weekend
             </Button>
             <Nusmods />
-            <Button colorScheme='blue' variant='solid' >
-              <SettingsIcon />
-            </Button>
+            <TimetableSettings />
           </ButtonGroup>
       </Stack>
       <Drawer

@@ -17,6 +17,8 @@ router.post("/add", validateToken, async (req, res) => {
     frequency: req.body.frequency,
     additionalInfo: req.body.additionalInfo,
     colour: req.body.colour,
+    code: req.body.code,
+    nusmods: req.body.nusmods,
   })
   res.json("SUCCESS")
 })
