@@ -41,7 +41,7 @@ const Profile = () => {
     isOpen: isOpenUserModal, 
     onOpen: onOpenUserModal, 
     onClose: onCloseUserModal 
-} = useDisclosure()
+  } = useDisclosure()
   const { authState, setAuthState } = useContext(AuthContext);
 
   let navigate = useNavigate();
@@ -105,7 +105,7 @@ const Profile = () => {
       minH={'85vh'}
       align={'center'}
       justify={'center'}
-      bg={useColorModeValue('gray.50', 'gray.800')}>
+      bg={useColorModeValue('white.50', 'gray.800')}>
       <Stack
         spacing={4}
         w={'full'}
@@ -135,7 +135,8 @@ const Profile = () => {
               </Avatar>
             </Center>
             <Center w="full">
-              <Button w="full">Change Icon</Button>
+              {/* <Button w="full" >Change Icon</Button> */}
+              <input type="file" />
             </Center>
           </Stack>
         </FormControl>

@@ -21,6 +21,10 @@ const userRoute = require("./routes/User")
 app.use("/api/auth", userRoute)
 const taskRoute = require("./routes/Task")
 app.use("/api/task", taskRoute)
+const timetableRoute = require("./routes/Timetable")
+app.use("/api/timetable", timetableRoute)
+const nusmodsRoute = require("./routes/Nusmods")
+app.use("/api/nusmods", nusmodsRoute)
 
 // Production
 if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging") {
