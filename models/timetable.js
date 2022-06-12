@@ -38,7 +38,15 @@ const Timetable = new mongoose.Schema(
     colour: {
       type: Number,
       required: true,
-    }
+    },
+    code: {
+      type: String,
+      required: false,
+    },
+    nusmods: {
+      type: Boolean,
+      required: true,
+    },
     },
     { collection: "timetable-data" }
 )

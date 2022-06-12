@@ -43,6 +43,7 @@ import { useState, useEffect } from 'react';
 import axios from "axios"
 import { SettingsIcon } from '@chakra-ui/icons'
 import Nusmods from './Nusmods';
+import TimetableSettings from './TimetableSettings';
 
 const Timetable = () => {
 
@@ -70,7 +71,7 @@ const Timetable = () => {
   //color settings
   const evenColor = useColorModeValue("gray.100", "gray.600");
   const oddColor = useColorModeValue("gray.200", "gray.700");
-  const overlayColors = ['gray.500','blue','yellow.200','green.200','red.200','orange','teal','pink'];
+  const overlayColors = ['gray.500','blue.200','yellow.200','green.200','red.200','orange','teal','pink'];
 
   //weekend and time toggle settings
   const [weekend, setWeekend] = useState(false);
@@ -409,6 +410,7 @@ const Timetable = () => {
         frequency: activityFrequency,
         additionalInfo: activityInfo,
         colour: activityColour,
+        nusmods: false,
       }, {
         headers: {
           accessToken: localStorage.getItem("accessToken")
@@ -534,9 +536,7 @@ const Timetable = () => {
               Toggle Weekend
             </Button>
             <Nusmods />
-            <Button colorScheme='blue' variant='solid' >
-              <SettingsIcon />
-            </Button>
+            <TimetableSettings />
           </ButtonGroup>
       </Stack>
       <Drawer
