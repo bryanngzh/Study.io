@@ -6,6 +6,7 @@ import LandingPage from './pages/LandingPage';
 import NavigationBar from './components/NavigationBar';
 import Profile from "./pages/Profile";
 import { AuthContext } from "./helpers/AuthContext";
+import { SettingsContext } from "./helpers/SettingsContext";
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
@@ -15,6 +16,12 @@ function App() {
     username: "",
     id: 0,
     status: false,
+  })
+
+  const [newTimer, setNewTimer] = useState({
+    work: 20,
+    short: 5,
+    long: 10,
   })
 
   useEffect(() => {
@@ -38,6 +45,9 @@ function App() {
   return (
     <div className="App">
       <AuthContext.Provider value={{ authState, setAuthState }}>
+      <SettingsContext.Provider value={{ 
+          newTimer, setNewTimer
+        }}>
         <BrowserRouter>
           <NavigationBar />
           <Routes>
@@ -47,6 +57,7 @@ function App() {
             <Route path="/profile" exact element={<Profile />} />
           </Routes>
         </BrowserRouter>
+        </SettingsContext.Provider>
       </AuthContext.Provider>
     </div>
   );

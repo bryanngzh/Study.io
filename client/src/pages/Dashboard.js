@@ -1,5 +1,6 @@
 import Task from "../components/Task";
 import Timetable from "../components/Timetable";
+import Pomodoro from "../components/Pomodoro";
 import { useState, useContext, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../helpers/AuthContext";
@@ -42,6 +43,16 @@ const Dashboard = () => {
     )
   }
 
+  function FeaturePomodoro({ title, desc, display, ...rest }) {
+    return (
+      <Box p={5} shadow='md' borderWidth='1px' width='80%' {...rest}>
+        <Pomodoro />
+        <Heading fontSize='xl'>{title}</Heading>
+        <Text mt={4}>{desc}</Text>
+      </Box>
+    )
+  }
+
   return (
     <>
       
@@ -49,7 +60,8 @@ const Dashboard = () => {
   >
         {/* <Heading size="md">Welcome back, {authState.username.toUpperCase()}</Heading> */}
         <Timetable />
-        <FeatureTask />      
+        <FeatureTask />  
+        <FeaturePomodoro />    
       </VStack>
      
     </>
