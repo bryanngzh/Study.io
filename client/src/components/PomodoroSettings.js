@@ -69,7 +69,7 @@ const PomodoroSettings = () => {
                     </Box>
                     <Box>
                     <FormLabel htmlFor='amount'>Short Break</FormLabel>
-                    <NumberInput max={15} min={5} value={shortVal} onChange={e => setShortVal(e)}>
+                    <NumberInput max={15} min={0} value={shortVal} onChange={e => setShortVal(e)}>
                         <NumberInputField id='amount' />
                         <NumberInputStepper>
                         <NumberIncrementStepper />
@@ -79,7 +79,7 @@ const PomodoroSettings = () => {
                     </Box>
                     <Box>
                     <FormLabel htmlFor='amount'>Long Break</FormLabel>
-                    <NumberInput max={30} min={5} value={longVal} onChange={e => setLongVal(e)}>
+                    <NumberInput max={30} min={0} value={longVal} onChange={e => setLongVal(e)}>
                         <NumberInputField id='amount' />
                         <NumberInputStepper>
                         <NumberIncrementStepper />

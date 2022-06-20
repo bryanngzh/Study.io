@@ -25,6 +25,8 @@ const timetableRoute = require("./routes/Timetable")
 app.use("/api/timetable", timetableRoute)
 const nusmodsRoute = require("./routes/Nusmods")
 app.use("/api/nusmods", nusmodsRoute)
+const reminderRoute = require("./routes/Reminder")
+app.use("/api/reminder", reminderRoute)
 
 // Production
 if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging") {
