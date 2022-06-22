@@ -11,14 +11,14 @@ import {
     TableCaption,
     TableContainer,
     useColorModeValue,
-    Center,
+    Center, Stack
   } from '@chakra-ui/react'
 import { Checkbox, CheckboxGroup } from '@chakra-ui/react'
 import {
     FormControl,
     FormLabel,
     FormErrorMessage,
-    FormHelperText,
+    FormHelperText, Heading,
   } from '@chakra-ui/react'
 import { Input } from '@chakra-ui/react'
 import { Box } from '@chakra-ui/react'
@@ -124,53 +124,57 @@ const Task = () => {
 
     return (
         <div>
-            <Box bg={useColorModeValue('white.100')} align={'center'} justify={'center'} p={4} >
-                <form className="form" onSubmit={addTask}>
-                    <FormControl>
-                        <FormLabel><span role="img" aria-label="notes" height='50px'> 📝 </span> To-do list</FormLabel>
-                        <Input
-                            size="sm" 
-                            placeholder="Add a task..." 
-                            value={inputVal}
-                            type="text"
-                            onChange={e => setInputVal(e.target.value)}
-                        />
-                    </FormControl>
-                </form>
-                <TableContainer>
-                    <Table variant='simple' size="sm" className="table-tiny">
-                        <Thead>
-                        <Tr>
-                            <Th></Th>
-                            <Th isNumeric> </Th>
-                        </Tr>
-                        </Thead>
-                        <Tbody>
-                            {tasks.map(task => (
-                                <Tr>
-                                    <>
-                                    <Td>
-                                        <Box>
-                                            <Checkbox onChange={() => toggleTask(task)} isChecked={task.completed}>{task.completed ? <del>{task.text}</del> : task.text} </Checkbox>
-                                        </Box>
-                                    </Td>
-                                    <Td isNumeric>
-                                        <IconButton variant="ghost" size="sm" icon={<DeleteIcon />} onClick={() => deleteTask(task)} />
-                                    </Td>
-                                    </>
-                                </Tr>
-                            ))}
-                        </Tbody>
-                        <Tfoot>
-                        <Tr>
-                            <Th> </Th>
-                            <Th isNumeric>{numberOfTasks()}</Th>
-                            {/* <Th isNumeric>{tasks.filter(task => task.completed).length}/{tasks.length} Task{tasks.length > 1 ? "s" : ""} Done</Th> */}
-                        </Tr>
-                        </Tfoot>
-                    </Table>
-                </TableContainer>
-            </Box>
+            <Stack>
+                <Heading as='h4' size='md'> Tasks 📝  </Heading>
+                <Box bg={useColorModeValue('white.100')} align={'center'} justify={'center'} p={4} >
+                    <form className="form" onSubmit={addTask}>
+                        <FormControl>
+                            <Input
+                                size="sm" 
+                                placeholder="Add a task..." 
+                                value={inputVal}
+                                type="text"
+                                onChange={e => setInputVal(e.target.value)}
+                            />
+                        </FormControl>
+                    </form>
+                    <TableContainer>
+                        <Table variant='simple' size="sm" className="table-tiny">
+                            <Thead>
+                            <Tr>
+                                <Th></Th>
+                                <Th isNumeric> </Th>
+                            </Tr>
+                            </Thead>
+                            <Tbody>
+                                {tasks.map(task => (
+                                    <Tr>
+                                        <>
+                                        <Td>
+                                            <Box>
+                                                <Checkbox onChange={() => toggleTask(task)} isChecked={task.completed}>{task.completed ? <del>{task.text}</del> : task.text} </Checkbox>
+                                            </Box>
+                                        </Td>
+                                        <Td isNumeric>
+                                            <IconButton variant="ghost" size="sm" icon={<DeleteIcon />} onClick={() => deleteTask(task)} />
+                                        </Td>
+                                        </>
+                                    </Tr>
+                                ))}
+                            </Tbody>
+                            <Tfoot>
+                            <Tr>
+                                <Th> </Th>
+                                <Th isNumeric>{numberOfTasks()}</Th>
+                                {/* <Th isNumeric>{tasks.filter(task => task.completed).length}/{tasks.length} Task{tasks.length > 1 ? "s" : ""} Done</Th> */}
+                            </Tr>
+                            </Tfoot>
+                        </Table>
+                    </TableContainer>
+                </Box>
+            </Stack>
+
+            
         </div>
     )
     
