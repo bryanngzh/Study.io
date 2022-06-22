@@ -21,9 +21,11 @@ router.get("/", validateToken, async (req, res) => {
 // Add Reminder
 router.post("/addReminder", validateToken, async (req, res) => {
     ReminderModel.create({
-        remindAt: req.body.remindAt,
-        reminderMsg: req.body.reminderMsg,
-        tag: req.body.tag,
+        date: req.body.date,
+        startTime: req.body.startTime,
+        endTime: req.body.endTime,
+        event: req.body.event,
+        tags: req.body.tags,
         notes: req.body.notes,
         isReminded: req.body.isReminded,
         email: req.user.email,

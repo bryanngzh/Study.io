@@ -96,7 +96,7 @@ const Pomodoro = () => {
                 setSeconds(seconds - 1);
             }
             
-        }, 1)
+        }, 1000)
         return () => clearInterval(interval);
     }, [seconds, mode])
 

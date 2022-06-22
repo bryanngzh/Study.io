@@ -2,15 +2,23 @@ const mongoose = require("mongoose")
 
 const Reminder = new mongoose.Schema(
     {
-        remindAt: {
+        date: {
             type: String,
             required: true
         }, 
-        reminderMsg: {
+        startTime: {
+            type: String,
+            required: true
+        },
+        endTime: {
+            type: String,
+            required: true
+        },  
+        event: {
             type: String,
             required: true
         }, 
-        tag: {
+        tags: {
             type: String,
         }, 
         notes: {
@@ -19,7 +27,11 @@ const Reminder = new mongoose.Schema(
         isReminded: {
             type: Boolean,
             required: true,
-        }, 
+        },
+        email: {
+            type: String,
+            required: true,
+        },  
     },
     { collection: "reminder-data" }
 )
