@@ -102,7 +102,7 @@ const Nusmods = () => {
 
   async function moduleFinder(arr) {
     const moduleName = arr[0];
-    const String = "https://api.nusmods.com/v2/2021-2022/modules/" + moduleName + ".json";
+    const String = "https://api.nusmods.com/v2/2022-2023/modules/" + moduleName + ".json";
     const response = await fetch(String);
     const data = await response.json();
     const colour = Math.floor(Math.random()*7);

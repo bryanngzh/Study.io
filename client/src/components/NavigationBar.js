@@ -25,7 +25,7 @@ import {
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
 
-const Links = ['dashboard'];
+const Links = ['dashboard', 'notes'];
 
 const NavigationBar = () => {
 
@@ -62,7 +62,7 @@ const NavigationBar = () => {
             </Link>
             <HStack
               as={'nav'}
-              spacing={4}
+              spacing={8}
               display={{ base: 'none', md: 'flex' }}>
               {authState.status ? (
                 Links.map((link) => (
