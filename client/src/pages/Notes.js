@@ -62,6 +62,8 @@ const Notes = () => {
   const [buttonOpacity, setButtonOpacity] = useState(0);
   const [currentFocus, setCurrentFocus] = useState("");
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const [noteName, setNoteName] = useState("")
+  const [noteID, setNoteID] = useState("");
 
   //include the adding of the editor storage json when adding row 
   const addRow = (folder) => {
@@ -311,30 +313,11 @@ const Notes = () => {
                           variant='link'
                           size="sm"
                           opacity={currentFocus === note._id ? buttonOpacity : 0}
-                          onClick={onOpen}
+                          onClick={() => { onOpen(); setNoteName(note.note); setNoteID(note._id); }}
                         >
                           open
                         </Button>
-                        <>
-                        <Modal isOpen={isOpen} onClose={onClose} > 
-                          <ModalOverlay bg='blackAlpha.300'/>
-                          <ModalContent maxW="56rem" h="80vh" overflowY="auto">
-                              <ModalHeader>Editor</ModalHeader>
-                            <ModalCloseButton />
-                              <ModalBody>
-                                {/* <Note/> */}
-                                <NoteEditor/>
-                            </ModalBody>
-                           
-                            <ModalFooter>
-                              <Button colorScheme='blue' mr={3} onClick={onClose}>
-                                Close
-                              </Button>
-                              <Button variant='ghost'>Secondary Action</Button>
-                            </ModalFooter>
-                          </ModalContent>
-                          </Modal>
-                          </>
+                        
                       </Flex>
                     </Td>
                     <Td>
@@ -353,6 +336,24 @@ const Notes = () => {
                   </Tr>
                 )
               })}
+              <>
+                <Modal isOpen={isOpen} onClose={onClose} > 
+                  <ModalOverlay bg='blackAlpha.300'/>
+                  <ModalContent maxW="56rem" h="80vh" overflowY="auto">
+                      <ModalHeader>{noteName}</ModalHeader>
+                    <ModalCloseButton />
+                      <ModalBody>
+                      <NoteEditor name={noteName} id={noteID } />
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button colorScheme='blue' mr={3} onClick={onClose}>
+                        Close
+                      </Button>
+                      <Button variant='ghost'>Secondary Action</Button>
+                    </ModalFooter>
+                  </ModalContent>
+                  </Modal>
+                </>
               </Tbody>
               {/* <Tfoot >
                 <Tr >

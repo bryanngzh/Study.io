@@ -3,18 +3,71 @@ import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
 import {
   Button,
-  Text
+  Text,
+  Box
 } from "@chakra-ui/react"
+import { useEffect, useState } from 'react'
+import axios from 'axios'
+
 
 //edit the tool bar to make it look nicer
-const NoteEditor = () => {
+const NoteEditor = (props) => {
+  const [note, setNote] = useState()
+  const [active, setActive] = useState(true)
+
+  useEffect(() => {
+    if (active) {
+      if (localStorage.getItem("accessToken")) {
+        const String = "/api/notedescription/" + props.id
+        axios.get(String, {
+          headers: {
+            accessToken: localStorage.getItem("accessToken")
+          },
+        }).then((response) => {
+          if (response.data.error) {
+            alert(response.data.error)
+          } else {
+            setNote(response.data.content)
+            setContent(response.data.content)
+          }
+        })
+      }
+    }
+  })
+
   const editor = useEditor({
     extensions: [
       StarterKit,
       Underline,
     ],
-    content: '<p>Hello World!</p>',
+    content: '<p></p>',
+    onUpdate: ({ editor }) => {
+      const json = editor.getJSON()
+      axios.post("/api/notedescription/editNote", {
+        id: props.id,
+        content: json.content,
+        }, {
+            headers: {
+                accessToken: localStorage.getItem("accessToken")
+            },
+        }).then((response) => {
+            if (response.data.error) {
+                alert(response.data.error)
+            } else {
+            }
+        })
+    },
   })
+
+  const setContent = (n) => {
+    editor.commands.setContent(
+      {
+        "type": "doc",
+        "content": n
+      }
+    )
+    setActive(false)
+  }
 
   return (
     <>

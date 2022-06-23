@@ -21,7 +21,16 @@ const Notedescription = new mongoose.Schema(
         unit: {
           type: String,
           required: false,
+        },
+        type: {
+          type: String,
+          required: true,
+        },
+        content: {
+          type: Array,
+          required: true,
         }
+        
     },
     { collection: "notedescription-data" }
 )

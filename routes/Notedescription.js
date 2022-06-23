@@ -26,6 +26,18 @@ router.post("/addNoteDescription", validateToken, async (req, res) => {
     week: req.body.week,
     note: req.body.note,
     unit: req.body.unit,
+    type: "doc",
+    content: [
+      {
+        "type": "paragraph",
+        "content": [
+          {
+            "type": "text",
+            "text": "Type here..."
+          }
+        ]
+      }
+    ]
   })
   res.json("SUCCESS")
 })
@@ -47,6 +59,28 @@ router.post("/editNoteDescription", validateToken, async (req, res) => {
         week: req.body.week,
         note: req.body.note,
         unit: req.body.unit,
+    }).exec()
+      res.json("SUCCESS")
+  } catch (error) {
+      res.json("ERROR")
+  }
+})
+
+//getSpecificNote
+router.get("/:id", validateToken, async (req, res) => {
+  const ans = await NoteDescriptionModel.findById(req.params.id);
+  if (ans !== null) {
+    res.json(ans);
+  } else {
+    res.json("ERROR");
+  }
+})
+
+//edit the note 
+router.post("/editNote", validateToken, async (req, res) => {
+  try {
+      await NoteDescriptionModel.findByIdAndUpdate(req.body.id, {
+        content: req.body.content
     }).exec()
       res.json("SUCCESS")
   } catch (error) {
