@@ -1,0 +1,57 @@
+const express = require("express")
+const router = express.Router();
+const { validateToken } = require("../middlewares/AuthMiddleware")
+const mongoose = require("mongoose")
+
+// Models
+const NoteDescriptionModel = require("../models/notedescription")
+
+// Display noteDescriptions
+router.get("/", validateToken, async (req, res) => {
+  const email = req.user.email
+  NoteDescriptionModel.where({ email: email }).find((err, data) => {
+      if (data) {
+          res.json(data)
+      } else {
+          res.json("Unable to show data")
+      }
+  })
+})
+
+// Add NoteDescription
+router.post("/addNoteDescription", validateToken, async (req, res) => {
+  NoteDescriptionModel.create({
+    folder: req.body.folder,
+    email: req.user.email,
+    week: req.body.week,
+    note: req.body.note,
+    unit: req.body.unit,
+  })
+  res.json("SUCCESS")
+})
+
+// Delete NoteDescription
+router.post("/deleteNoteDescription", validateToken, async (req, res) => {
+  try {
+      await NoteDescriptionModel.findByIdAndRemove(req.body._id).exec()
+      res.json("SUCCESS")
+  } catch (error) {
+      res.json("ERROR")
+  }
+})
+
+//edit NoteDescription
+router.post("/editNoteDescription", validateToken, async (req, res) => {
+  try {
+      await NoteDescriptionModel.findByIdAndUpdate(req.body._id, {
+        week: req.body.week,
+        note: req.body.note,
+        unit: req.body.unit,
+    }).exec()
+      res.json("SUCCESS")
+  } catch (error) {
+      res.json("ERROR")
+  }
+})
+
+module.exports = router

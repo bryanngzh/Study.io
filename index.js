@@ -25,6 +25,10 @@ const timetableRoute = require("./routes/Timetable")
 app.use("/api/timetable", timetableRoute)
 const nusmodsRoute = require("./routes/Nusmods")
 app.use("/api/nusmods", nusmodsRoute)
+const notefolderRoute = require("./routes/Notefolder")
+app.use("/api/notefolder", notefolderRoute)
+const notedescriptionRoute = require("./routes/Notedescription")
+app.use("/api/notedescription", notedescriptionRoute)
 
 // Production
 if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging") {

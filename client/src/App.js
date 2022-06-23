@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard"
 import LandingPage from './pages/LandingPage';
 import NavigationBar from './components/NavigationBar';
 import Profile from "./pages/Profile";
+import Notes from "./pages/Notes"
 import { AuthContext } from "./helpers/AuthContext";
 import { SettingsContext } from "./helpers/SettingsContext";
 import { useState, useEffect } from 'react'
@@ -55,8 +56,9 @@ function App() {
             <Route path="/register" exact element={<Registration />} />
             <Route path="/dashboard" exact element={<Dashboard />} />
             <Route path="/profile" exact element={<Profile />} />
+            <Route path="/notes" exact element={<Notes />} />
           </Routes>
-        </BrowserRouter>
+          </BrowserRouter>
         </SettingsContext.Provider>
       </AuthContext.Provider>
     </div>
