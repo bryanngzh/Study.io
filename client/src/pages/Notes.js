@@ -44,7 +44,6 @@ import {
 } from '@chakra-ui/icons'
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../helpers/AuthContext';
-import Note from "../components/Note";
 import axios from 'axios';
 import NoteEditor from '../components/NoteEditor';
 
@@ -340,7 +339,7 @@ const Notes = () => {
                 <Modal isOpen={isOpen} onClose={onClose} > 
                   <ModalOverlay bg='blackAlpha.300'/>
                   <ModalContent maxW="56rem" h="80vh" overflowY="auto">
-                      <ModalHeader>{noteName}</ModalHeader>
+                      <ModalHeader>{noteName ? noteName : "Untitled"}</ModalHeader>
                     <ModalCloseButton />
                       <ModalBody>
                       <NoteEditor name={noteName} id={noteID } />
