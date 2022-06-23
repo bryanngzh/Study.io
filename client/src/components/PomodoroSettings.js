@@ -59,7 +59,7 @@ const PomodoroSettings = () => {
                     <HStack>
                     <Box>
                     <FormLabel htmlFor='amount'>Pomodoro</FormLabel>
-                    <NumberInput max={120} min={0} value={workVal} onChange={e => setWorkVal(e)}>
+                    <NumberInput max={120} min={20} value={workVal} onChange={e => setWorkVal(e)}>
                         <NumberInputField id='amount' />
                         <NumberInputStepper>
                             <NumberIncrementStepper />
@@ -79,7 +79,7 @@ const PomodoroSettings = () => {
                     </Box>
                     <Box>
                     <FormLabel htmlFor='amount'>Long Break</FormLabel>
-                    <NumberInput max={30} min={5} value={longVal} onChange={e => setLongVal(e)}>
+                    <NumberInput max={30} min={10} value={longVal} onChange={e => setLongVal(e)}>
                         <NumberInputField id='amount' />
                         <NumberInputStepper>
                         <NumberIncrementStepper />

@@ -1,6 +1,7 @@
 import Task from "../components/Task";
 import Timetable from "../components/Timetable";
 import Pomodoro from "../components/Pomodoro";
+import Reminder from "../components/Reminder"
 import { useState, useContext, useEffect } from "react"
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../helpers/AuthContext";
@@ -53,6 +54,16 @@ const Dashboard = () => {
     )
   }
 
+  function FeatureReminder({ title, desc, display, ...rest }) {
+    return (
+      <Box p={5} shadow='md' borderWidth='1px' width='80%' {...rest}>
+        <Reminder/>
+        <Heading fontSize='xl'>{title}</Heading>
+        <Text mt={4}>{desc}</Text>
+      </Box>
+    )
+  }
+
   return (
     <>
       
@@ -60,8 +71,12 @@ const Dashboard = () => {
   >
         {/* <Heading size="md">Welcome back, {authState.username.toUpperCase()}</Heading> */}
         <Timetable />
-        <FeatureTask />  
-        <FeaturePomodoro />    
+        <VStack spacing={30} padding='10px' width='100%' height='100%'>
+          <FeaturePomodoro />  
+          <FeatureTask />   
+          <FeatureReminder />
+        </VStack>
+
       </VStack>
      
     </>
