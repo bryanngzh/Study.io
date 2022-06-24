@@ -33,6 +33,7 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  Tooltip,
 } from '@chakra-ui/react'
 import {
   ArrowLeftIcon,
@@ -46,6 +47,8 @@ import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../helpers/AuthContext';
 import axios from 'axios';
 import NoteEditor from '../components/NoteEditor';
+import DeleteNote from '../components/DeleteNote';
+import DeleteFolder from '../components/DeleteFolder';
 
 const Notes = () => {
   const { authState } = useContext(AuthContext)
@@ -63,6 +66,7 @@ const Notes = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [noteName, setNoteName] = useState("")
   const [noteID, setNoteID] = useState("");
+  const [settings, setSettings] = useState(false);
 
   //include the adding of the editor storage json when adding row 
   const addRow = (folder) => {
@@ -204,40 +208,50 @@ const Notes = () => {
             </Button>
           </Stack>
           <Stack spacing={0}>
-            <Flex role="button" _hover={{ bg: color}} height="35px" width="300px">
-              <Center>
+            <Tooltip label='Feature to be completed' fontSize='md'  placement='right'>
+              <Flex role="button" _hover={{ bg: color}} height="35px" width="300px">
+                <Center>
+                  &nbsp;
+                  &nbsp;
+                  &nbsp;
+                <SearchIcon />
                 &nbsp;
+                <Text>Search</Text>
+                </Center>
+                </Flex>
+              </Tooltip>
+            <Tooltip label='Click to toggle delete' fontSize='md'  placement='right'>
+              <Flex role="button" _hover={{ bg: color }} height="35px" width="300px" onClick={() => {setSettings(!settings)}}>
+                <Center>
+                  &nbsp;
+                  &nbsp;
+                  &nbsp;
+                <SettingsIcon />
                 &nbsp;
-                &nbsp;
-              <SearchIcon />
-              &nbsp;
-              <Text>Search</Text>
-              </Center>
-            </Flex>
-            <Flex role="button" _hover={{ bg: color }} height="35px" width="300px">
-              <Center>
-                &nbsp;
-                &nbsp;
-                &nbsp;
-              <SettingsIcon />
-              &nbsp;
-              <Text>Settings</Text>
-              </Center>
-            </Flex>
+                <Text>Settings</Text>
+                </Center>
+              </Flex>
+            </Tooltip>
           </Stack>
           <Stack spacing={0}>
             <Text p={4}>Notefolder</Text>
             {notefolder.map(x =>
-              <Flex
-                role="button"
-                _hover={{ bg: color }}
-                height="35px"
-                width="300px"
-                onClick={() => { setCurrentFolder(x.title) }}>
-                &nbsp;
-                &nbsp;
-                <Center>{x.title}</Center>
-              </Flex>)}
+              <Flex>
+                <Flex
+                  role="button"
+                  _hover={{ bg: color }}
+                  height="35px"
+                  width="300px"
+                  onClick={() => { setCurrentFolder(x.title) }}>
+                  &nbsp;
+                  &nbsp;
+                  <Center>{x.title}</Center>
+                  </Flex>
+                  {settings ? <>
+                  <Spacer /><DeleteFolder id={x._id} />
+                  </>
+                  : <></>}
+                  </Flex> )}
             <Flex role="button" _hover={{ bg: color }} height="35px" width="300px">
                 <Center>
                 &nbsp;
@@ -259,7 +273,7 @@ const Notes = () => {
         </Box>}
       <Box p={5}   width = '100%' height = "100%">
         <Box left={40}>
-          <Heading>{currentFolder}</Heading>
+          <Heading>{currentFolder ? currentFolder : "Click/Create a Notefolder to get Started!"}</Heading>
           </Box>
           <TableContainer>
             <Table variant='simple' size="md">
@@ -269,6 +283,7 @@ const Notes = () => {
                   <Th>Week</Th>
                   <Th>Topic/Lesson</Th>
                   <Th>Unit/modules</Th>
+                  {settings ? <Th isNumeric>Delete</Th> : <></>}
                 </Tr>
               </Thead>
             <Tbody>
@@ -316,7 +331,6 @@ const Notes = () => {
                         >
                           open
                         </Button>
-                        
                       </Flex>
                     </Td>
                     <Td>
@@ -331,7 +345,10 @@ const Notes = () => {
                           </Editable>
                         </MenuList>
                       </Menu>
-                    </Td>
+                      </Td>
+                    {settings ? 
+                    <Td isNumeric><DeleteNote id={note._id} /></Td>
+                      : <></>}
                   </Tr>
                 )
               })}
@@ -345,10 +362,10 @@ const Notes = () => {
                       <NoteEditor name={noteName} id={noteID } />
                     </ModalBody>
                     <ModalFooter>
-                      <Button colorScheme='blue' mr={3} onClick={onClose}>
+                      {/* <Button colorScheme='blue' mr={3} onClick={onClose}>
                         Close
                       </Button>
-                      <Button variant='ghost'>Secondary Action</Button>
+                      <Button variant='ghost'>Secondary Action</Button> */}
                     </ModalFooter>
                   </ModalContent>
                   </Modal>
