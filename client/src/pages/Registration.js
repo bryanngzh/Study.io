@@ -25,7 +25,9 @@ const Registration = () => {
     const [username, setUsername] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [confirmPassword, setConfirmPassword] = useState("")
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
     const { authState } = useContext(AuthContext);
 
@@ -40,7 +42,7 @@ const Registration = () => {
 
     const registerUser = (event) => {
       event.preventDefault()
-      axios.post("/api/auth", {username, email, password}).then((response) => {
+      axios.post("/api/auth", {username, email, password, confirmPassword}).then((response) => {
         console.log(response.data)
         if (response.data.error) {
             alert(response.data.error)
@@ -112,6 +114,25 @@ const Registration = () => {
                           setShowPassword((showPassword) => !showPassword)
                         }>
                         {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                      </Button>
+                    </InputRightElement>
+                  </InputGroup>
+              </FormControl>
+              <FormControl id="password" isRequired>
+                  <FormLabel>Confirm Password</FormLabel>
+                  <InputGroup>
+                    <Input
+                      type={showConfirmPassword ? 'text' : 'password'} 
+                      value={confirmPassword}
+                      onChange={(e) => setConfirmPassword(e.target.value)}         
+                    />
+                    <InputRightElement h={'full'}>
+                      <Button
+                        variant={'ghost'}
+                        onClick={() =>
+                          setShowConfirmPassword((showConfirmPassword) => !showConfirmPassword)
+                        }>
+                        {showConfirmPassword ? <ViewIcon /> : <ViewOffIcon />}
                       </Button>
                     </InputRightElement>
                   </InputGroup>

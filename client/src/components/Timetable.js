@@ -317,6 +317,7 @@ const Timetable = () => {
               bg={overlayColors[item.colour]} color="black" rounded='md' height={20}
             >
               <Text fontSize='sm'>{finalLength > 4 ? item.name : ""}</Text>
+              <Text fontSize='xs'>{finalLength > 4 ? detailedTime[item.startTime] + " - " + detailedTime[item.endTime]: ""}</Text>
               <Text fontSize='xs'>{finalLength > 4 ? item.code : ""}</Text>
               <Text fontSize='xs'>{finalLength > 4 ? item.location : ""}</Text>
               {/* <Text fontSize='xs'>{finalLength >= 12 ? item.frequency : ""}</Text> */}
@@ -328,7 +329,8 @@ const Timetable = () => {
         </PopoverHeader>
         <PopoverArrow />
         <PopoverCloseButton />
-        <PopoverBody>
+          <PopoverBody>
+          <Text fontSize='xs'>{detailedTime[item.startTime] + " - " + detailedTime[item.endTime]}</Text>
           <Text fontSize='xs'>{item.code}</Text>
           <Text fontSize='xs'>{item.location}</Text>
           <Text fontSize='xs'>{item.frequency}</Text>
@@ -343,7 +345,7 @@ const Timetable = () => {
         >
           <Box fontSize='sm'></Box>
           <ButtonGroup size='sm'>
-            <Button colorScheme='green'>Edit</Button>
+            {/* <Button colorScheme='green'>Edit</Button> */}
             <Button colorScheme='red' onClick={() => deleteActivity(item)}>
               Delete
             </Button>
@@ -401,6 +403,19 @@ const Timetable = () => {
   }
 
   const addTimetableActivity = () => {
+    var length = 0;
+    if (+drawerTime > +drawerEndTime) {
+      length = +144 - +drawerTime + +drawerEndTime;
+    } else {
+      length = +drawerEndTime - +drawerTime;
+    }
+    if (length === 0) {
+      alert("Please input a valid time period")
+      return
+    } else if (length > 36) {
+      alert("Activity cannot be longer than 6 hours")
+      return
+    }
     if (activityName.length > 0) {
       axios.post("/api/timetable/add", {
         name: activityName,
@@ -636,7 +651,7 @@ const Timetable = () => {
             <Button variant='outline' mr={3} onClick={onClose}>
               Cancel
             </Button>
-            <Button colorScheme='blue' onClick={addTimetableActivity}>Save</Button>
+            <Button colorScheme='blue' onClick={() => { addTimetableActivity() }}>Save</Button>
           </DrawerFooter>
         </DrawerContent>
       </Drawer>

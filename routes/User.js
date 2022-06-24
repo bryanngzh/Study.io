@@ -8,6 +8,15 @@ const { check, validationResult } = require('express-validator');
 // Models
 const UserModel = require("../models/user");
 
+
+//custom function to check if password is good 
+const validatePassword = (password) => {
+    // for (var i = 0; i < password.length; i++) {
+    //     if (password.charCodeAt(i))
+    // }
+    
+}
+
 // Register
 router.post("/", [
     check('email', 'Please include a valid email').isEmail(),
@@ -17,10 +26,15 @@ router.post("/", [
         email: req.body.email
     })
     const errors = validationResult(req);
-    if (req.body.password.length < 1) {
-        res.json({ error: "Please enter a valid password" })
+    if (req.body.username.length <= 0 || req.body.password.length <= 0
+        || req.body.email.length <= 0 || req.body.confirmPassword.length <= 0) {
+            res.json({ error: "Please fill in all fields in the form." })
+    } else if (req.body.password !== req.body.confirmPassword) {
+        res.json({ error: "Passwords do not match!" })
+    } else if (req.body.password.length < 6) {
+        res.json({ error: "Please enter a valid password with at least 6 characters." })
     } else if (!errors.isEmpty()) {
-        res.json({ error: "Please enter a valid email address" });
+        res.json({ error: "Please enter a valid email address." });
     } else if (!user && req.body.username.length > 0 && req.body.password.length > 0 && req.body.email.length > 0) {
         bcrypt.hash(req.body.password, 10).then((hash) => {
             UserModel.create({
@@ -32,11 +46,13 @@ router.post("/", [
         res.json("SUCCESS")
     } else if (user) {
         res.json({ error: "User is already registered" })
-    } else {
+    } else if (req.body.username.length === 0) {
         res.json({ error: "Please enter a valid username" })
     }
 
 })
+
+
 
 // Login
 router.post("/login", async (req, res) => {
