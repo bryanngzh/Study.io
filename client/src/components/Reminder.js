@@ -12,7 +12,7 @@ import {
   TableCaption,
   TableContainer,
   useColorModeValue,
-  Center, HStack, VStack, Stack, Button, Heading, Badge
+  Center, HStack, VStack, Stack, Button, Heading, Badge, Flex, Spacer
 } from '@chakra-ui/react'
 import { Checkbox, CheckboxGroup } from '@chakra-ui/react'
 import {
@@ -25,6 +25,9 @@ import { Input } from '@chakra-ui/react'
 import { Box } from '@chakra-ui/react'
 import { IconButton } from '@chakra-ui/react'
 import { DeleteIcon } from '@chakra-ui/icons'
+import { FaTelegram } from 'react-icons/fa'
+import TelegramModal from './TelegramModal'
+
 
 const Reminder = () => {
   
@@ -67,55 +70,64 @@ const Reminder = () => {
   
   return (
     <div> 
-        <HStack>
+        <Stack spacing={4}>
           <Heading as='h4' size='md'> Upcoming Events </Heading>
-          <ReminderModal />
-        </HStack>
-        <Box>
-          <TableContainer>
-                    <Table variant='simple' size="sm" className="table-tiny">
-                        <Thead>
-                        <Tr>
-                            <Th> Date </Th>
-                            <Th> Event </Th>
-                            <Th> Tags </Th>
-                            <Th> Notes </Th>
-                        </Tr>
-                        </Thead>
-                        <Tbody>
-                            {reminders.map(reminder => (
-                                <Tr>
-                                    <>
-                                      <Td>
-                                          {reminder.date.split("T")[0] + " @ " + detailedTime[reminder.startTime] + " - " + detailedTime[reminder.endTime]}
-                                      </Td>
-                                      <Td>
-                                          {reminder.event}
-                                      </Td>
-                                      <Td>
-                                          <Badge colorScheme={colors[Math.floor(Math.random()*3)]}> { reminder.tags }</Badge>
-                                      </Td>
-                                      <Td>
-                                          {reminder.notes}
-                                      </Td>
-                                    </>
-                                </Tr>
-                            ))}
-                        </Tbody>
-                        <Tfoot>
+          <Box>
+            <TableContainer>
+                      <Table variant='simple' size="md" className="table-tiny">
+                          <Thead>
                           <Tr>
-                              <Th> </Th>
-                              <Th isNumeric> </Th>
-                              <Th> </Th>
-                              <Th> </Th>
+                              <Th> Date </Th>
+                              <Th> Event </Th>
+                              <Th> Tags </Th>
+                              <Th> Notes </Th>
                           </Tr>
-                        </Tfoot>
-                    </Table>
-                </TableContainer>
-          
-        </Box> 
-        
-        
+                          </Thead>
+                          <Tbody>
+                              {reminders.map(reminder => (
+                                  <Tr>
+                                      <>
+                                        <Td>
+                                            {reminder.date.split("T")[0] + " @ " + detailedTime[reminder.startTime] + " - " + detailedTime[reminder.endTime]}
+                                        </Td>
+                                        <Td>
+                                            {reminder.event}
+                                        </Td>
+                                        <Td>
+                                            <Badge colorScheme={colors[Math.floor(Math.random()*3)]}> { reminder.tags }</Badge>
+                                        </Td>
+                                        <Td>
+                                            {reminder.notes}
+                                        </Td>
+                                      </>
+                                  </Tr>
+                              ))}
+                          </Tbody>
+                          <Tfoot>
+                            <Tr>
+                                <Th> </Th>
+                                <Th isNumeric> </Th>
+                                <Th> </Th>
+                                <Th> </Th>
+                            </Tr>
+                          </Tfoot>
+                      </Table>
+                  </TableContainer>
+                  </Box> 
+                </Stack>
+                
+                  <Box>
+                  <Flex>  
+                    <Spacer />
+                    <HStack spacing={2}>
+                    <ReminderModal />
+                    <TelegramModal />
+                    </HStack>
+                  </Flex>
+
+                    
+                  </Box>  
+
     </div>
   )
 }

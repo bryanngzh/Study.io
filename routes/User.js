@@ -96,6 +96,14 @@ router.post("/updateUsername", validateToken, async (req, res) => {
     })
 })
 
+//get token_id
+router.get('/token', validateToken, async (req, res) => {
+    const user = await UserModel.findOne({
+        email: req.user.email
+    })
+    res.json(user._id);
+})
+
 //auth state
 router.get('/auth', validateToken, (req, res) => {
     res.json(req.user)

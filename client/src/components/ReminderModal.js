@@ -78,7 +78,7 @@ const ReminderModal = () => {
 
     return (
     <>
-        <Button onClick={onOpen} variant='outline' size='md'> + </Button>
+        <Button onClick={onOpen} colorScheme='black' variant='outline' size='md'> + Add Event </Button>
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
         <ModalContent>
