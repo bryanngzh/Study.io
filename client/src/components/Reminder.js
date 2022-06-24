@@ -66,7 +66,21 @@ const Reminder = () => {
     }
 }, [reminders])
     
-  
+const deleteReminder = (event) => {
+  axios.post("/api/reminder/deleteReminder", {
+      _id: event._id, 
+  }, {
+      headers: {
+          accessToken: localStorage.getItem("accessToken")
+      },
+  }).then((response) => {
+      if (response.data.error) {
+          alert(response.data.error)
+      } else {
+          setReminders([...reminders])
+      }
+  })
+}
   
   return (
     <div> 
@@ -81,6 +95,7 @@ const Reminder = () => {
                               <Th> Event </Th>
                               <Th> Tags </Th>
                               <Th> Notes </Th>
+                              <Th> </Th>
                           </Tr>
                           </Thead>
                           <Tbody>
@@ -98,6 +113,9 @@ const Reminder = () => {
                                         </Td>
                                         <Td>
                                             {reminder.notes}
+                                        </Td>
+                                        <Td>
+                                          <IconButton variant="ghost" size="sm" icon={<DeleteIcon />} onClick={() => deleteReminder(reminder)} />
                                         </Td>
                                       </>
                                   </Tr>

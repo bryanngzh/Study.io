@@ -319,7 +319,7 @@ const Timetable = () => {
               <Text fontSize='sm'>{finalLength > 4 ? item.name : ""}</Text>
               <Text fontSize='xs'>{finalLength > 4 ? item.code : ""}</Text>
               <Text fontSize='xs'>{finalLength > 4 ? item.location : ""}</Text>
-              <Text fontSize='xs'>{finalLength >= 12 ? item.frequency : ""}</Text>
+              {/* <Text fontSize='xs'>{finalLength >= 12 ? item.frequency : ""}</Text> */}
             </GridItem>
           </PopoverTrigger>
           <PopoverContent color='white' bg='blue.800' borderColor='blue.800'>
