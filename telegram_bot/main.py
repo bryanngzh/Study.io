@@ -49,27 +49,28 @@ def help_command(update, context):
     update.message.reply_text(help_msg)    
 
 def login_command(update, context):
-    if (len(update.message.text) < 6):
-        user_input = update.message.text.split()[1] 
+    if (len(update.message.text) > 6):
+        user_input = update.message.text.split()[1]
+        print(update.message.chat.id)
+        global isLoggedIn
+        global user_email
+        global username
+        if isLoggedIn == False:
+            try:
+                user_email = collection_user.find_one({"_id": ObjectId(str(user_input))})["email"] 
+                username = collection_user.find_one({"_id": ObjectId(str(user_input))})["username"]
+            except:
+                update.message.reply_text("Please enter a valid token_id.")
+            else:
+                isLoggedIn = True
+                print(user_email)
+                print(isLoggedIn)
+                update.message.reply_text("Login Successful")
+        else:
+            update.message.reply_text("You are already logged in.") 
     else:
         update.message.reply_text("Please enter a valid token_id.")
-    print(update.message.chat.id)
-    global isLoggedIn
-    global user_email
-    global username
-    if isLoggedIn == False:
-        try:
-            user_email = collection_user.find_one({"_id": ObjectId(str(user_input))})["email"] 
-            username = collection_user.find_one({"_id": ObjectId(str(user_input))})["username"]
-        except:
-            update.message.reply_text("Please enter a valid token_id.")
-        else:
-            isLoggedIn = True
-            print(user_email)
-            print(isLoggedIn)
-            update.message.reply_text("Login Successful")
-    else:
-        update.message.reply_text("You are already logged in.")
+    
     
 def schedule_command(update, context):
     global user_email

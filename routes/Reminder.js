@@ -34,7 +34,7 @@ router.post("/addReminder", validateToken, async (req, res) => {
 })
 
 // Delete Reminder
-router.post("/deleteTask", validateToken, async (req, res) => {
+router.post("/deleteReminder", validateToken, async (req, res) => {
     try {
         await ReminderModel.findByIdAndRemove(req.body._id).exec()
         res.json("SUCCESS")
