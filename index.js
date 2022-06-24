@@ -31,6 +31,8 @@ const notedescriptionRoute = require("./routes/Notedescription")
 app.use("/api/notedescription", notedescriptionRoute)
 const reminderRoute = require("./routes/Reminder")
 app.use("/api/reminder", reminderRoute)
+const noteRoute = require("./routes/Note")
+app.use("/api/note", noteRoute)
 
 // Production
 if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging") {
