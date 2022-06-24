@@ -11,9 +11,9 @@ const UserModel = require("../models/user");
 
 //custom function to check if password is good 
 const validatePassword = (password) => {
-    for (var i = 0; i < password.length; i++) {
-        if (password.charCodeAt(i))
-    }
+    // for (var i = 0; i < password.length; i++) {
+    //     if (password.charCodeAt(i))
+    // }
     
 }
 
