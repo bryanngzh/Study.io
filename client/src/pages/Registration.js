@@ -18,6 +18,7 @@ import {
     Text,
     useColorModeValue,
     Link,
+    Tooltip,
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 
@@ -100,23 +101,26 @@ const Registration = () => {
                     />
                 </FormControl>
                 <FormControl id="password" isRequired>
-                  <FormLabel>Password</FormLabel>
-                  <InputGroup>
-                    <Input
-                      type={showPassword ? 'text' : 'password'} 
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}         
-                    />
-                    <InputRightElement h={'full'}>
-                      <Button
-                        variant={'ghost'}
-                        onClick={() =>
-                          setShowPassword((showPassword) => !showPassword)
-                        }>
-                        {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                      </Button>
-                    </InputRightElement>
-                  </InputGroup>
+                <FormLabel>Password</FormLabel>
+                <Tooltip label="Password must contain minimum 6 characters and 
+                  have at least 1 special character. eg: !,?,@,$" aria-label='A tooltip'>
+                    <InputGroup>
+                      <Input
+                        type={showPassword ? 'text' : 'password'} 
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}         
+                      />
+                      <InputRightElement h={'full'}>
+                        <Button
+                          variant={'ghost'}
+                          onClick={() =>
+                            setShowPassword((showPassword) => !showPassword)
+                          }>
+                          {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                        </Button>
+                      </InputRightElement>
+                    </InputGroup>
+                  </Tooltip>
               </FormControl>
               <FormControl id="password" isRequired>
                   <FormLabel>Confirm Password</FormLabel>

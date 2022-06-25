@@ -11,10 +11,25 @@ const UserModel = require("../models/user");
 
 //custom function to check if password is good 
 const validatePassword = (password) => {
-    // for (var i = 0; i < password.length; i++) {
-    //     if (password.charCodeAt(i))
-    // }
-    
+    var haveSpecialCharacter = false;
+    var containsSpace = false;
+    for (var i = 0; i < password.length; i++) {
+        let code = password.charCodeAt(i);
+        if (code === 32) {
+            containsSpace = true;
+        }
+        if ((code >= 33 && code <= 47) || (code >= 58 && code <= 64)
+            || (code >= 91 && code <= 96) || (code >= 123 && code <= 126)) {
+            haveSpecialCharacter = true;
+        }
+    }  
+    if (containsSpace) {
+        return 1;
+    } else if (haveSpecialCharacter) {
+        return 2;
+    } else {
+        return 3;
+    }
 }
 
 // Register
@@ -36,14 +51,21 @@ router.post("/", [
     } else if (!errors.isEmpty()) {
         res.json({ error: "Please enter a valid email address." });
     } else if (!user && req.body.username.length > 0 && req.body.password.length > 0 && req.body.email.length > 0) {
-        bcrypt.hash(req.body.password, 10).then((hash) => {
-            UserModel.create({
-                username: req.body.username,
-                email: req.body.email,
-                password: hash,
+        const temp = validatePassword(req.body.password)
+        if (temp === 1) {
+            res.json({ error: "Password should not contain a space" });
+        } else if (temp === 3) {
+            res.json({ error: "Password must contain at least 1 special character. eg: !,?,@,$" });
+        } else {
+            bcrypt.hash(req.body.password, 10).then((hash) => {
+                UserModel.create({
+                    username: req.body.username,
+                    email: req.body.email,
+                    password: hash,
+                })
             })
-        })
-        res.json("SUCCESS")
+            res.json("SUCCESS")
+        }
     } else if (user) {
         res.json({ error: "User is already registered" })
     } else if (req.body.username.length === 0) {
