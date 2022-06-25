@@ -49,6 +49,7 @@ import axios from 'axios';
 import NoteEditor from '../components/NoteEditor';
 import DeleteNote from '../components/DeleteNote';
 import DeleteFolder from '../components/DeleteFolder';
+import { useNavigate } from "react-router-dom";
 
 const Notes = () => {
   const { authState } = useContext(AuthContext)
@@ -67,6 +68,14 @@ const Notes = () => {
   const [noteName, setNoteName] = useState("")
   const [noteID, setNoteID] = useState("");
   const [settings, setSettings] = useState(false);
+
+    let navigate = useNavigate();
+
+    useEffect(() => {
+        if (!authState.status) {
+          navigate('/')
+        }
+    })
 
   //include the adding of the editor storage json when adding row 
   const addRow = (folder) => {
