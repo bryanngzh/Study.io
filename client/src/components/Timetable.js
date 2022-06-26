@@ -135,9 +135,9 @@ const Timetable = () => {
     const height = multiplier * 80 + (multiplier - 1) * 3.5 + "px"
     for (let j = 0; j < 16; j++) {
       if (j === 0) {
-        boxes.push(<Center bg={oddColor} height={height}>{days[i]}</Center>)
+        boxes.push(<Center key={i + multiplier + j } bg={oddColor} height={height}>{days[i]}</Center>)
       } else {
-        boxes.push(<Center bg={j % 2 === 0 ? oddColor : evenColor} height={height}></Center>)
+        boxes.push(<Center key={i + multiplier + j } bg={j % 2 === 0 ? oddColor : evenColor} height={height}></Center>)
       }
     }
     return boxes;
@@ -149,6 +149,7 @@ const Timetable = () => {
     for (let j = 0; j < 144; j++) {
       boxes.push(<GridItem
         role="button" id={days[i] + j}
+        key = {new Date().getTime() + i + j}
         onClick={() => { onOpen(); setDrawerSettings(i,j)}}
         colSpan={1}
         opacity={0}
@@ -364,11 +365,11 @@ const Timetable = () => {
 
   //responsive timing changes
   const makeTiming = (start) => {
-    timeDisplay.push(<Text></Text>)
+    timeDisplay.push(<Text key="timing"></Text>)
     for (let i = start; i < start+15; i++) {
-      timeDisplay.push(<Text>{time[i % 24]}</Text>)
+      timeDisplay.push(<Text key={"time" + i}>{time[i % 24]}</Text>)
     }
-    timeDisplay.push(<Text></Text>)
+    timeDisplay.push(<Text key="timing2"></Text>)
     return timeDisplay;
   }
 
@@ -385,7 +386,7 @@ const Timetable = () => {
   const makeDetailedTiming = () => {
     const box = [];
     for (let i = 0; i < detailedTime.length; i++) {
-      box.push(<option value={i}>{detailedTime[i]}</option>)
+      box.push(<option value={i} key={"detailed" + i}>{detailedTime[i]}</option>)
     }
     return box;
   }
@@ -450,7 +451,7 @@ const Timetable = () => {
   } 
   
   return (
-    <Container overflowX="auto" overflowY="auto" minWidth = "1600">
+    <Container overflowX="auto" overflowY="auto" minWidth = "1600" title="timetable">
       <VStack spacing = {0.3}>
         <HStack spacing='64px'>
           {makeTiming(startTime)}

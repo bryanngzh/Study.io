@@ -206,7 +206,7 @@ const Notes = () => {
 }, [noteDescriptions])
 
   return (
-    <Stack direction="row" height="100vh" >
+    <Stack direction="row" height="100vh" title="notes">
       {open ?
         <Box shadow='md' borderWidth='1px' width='17%' minWidth="300px" overflowX="hidden" overflowY="auto">
           <Stack direction="row">

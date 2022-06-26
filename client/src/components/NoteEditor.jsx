@@ -198,7 +198,7 @@ const NoteEditor = (props) => {
   }
 
   return (
-    <div>
+    <div title="noteeditor">
       {editor && <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
         <Button
           onClick={() => editor.chain().focus().toggleBold().run()}

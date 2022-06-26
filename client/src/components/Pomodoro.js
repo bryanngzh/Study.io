@@ -7,7 +7,6 @@ import {Button,
     CircularProgress, 
     Text,
     CircularProgressLabel, Progress } from '@chakra-ui/react';
-import { set } from 'mongoose';
 import { useState, useRef, useContext, useEffect } from 'react'
 import { SettingsContext } from '../helpers/SettingsContext';
 import PomodoroSettings from './PomodoroSettings';
@@ -173,7 +172,7 @@ const Pomodoro = () => {
     }
 
     return (
-        <div>
+        <div title="pomodoro">
             <Heading as='h4' size='md'> Pomodoro </Heading>
             <Stack spacing={7}>
                 <VStack>

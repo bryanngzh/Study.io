@@ -123,7 +123,7 @@ const Task = () => {
     }
 
     return (
-        <div>
+        <div title="taskbar">
             <Stack>
                 <Heading as='h4' size='md'> Tasks 📝  </Heading>
                 <Box bg={useColorModeValue('white.100')} align={'center'} justify={'center'} p={4} >

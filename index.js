@@ -18,7 +18,7 @@ var path = require('path')
 
 // Routes
 const userRoute = require("./routes/User")
-app.use("/api/auth", userRoute)
+app.use("/api/auth", userRoute.router)
 const taskRoute = require("./routes/Task")
 app.use("/api/task", taskRoute)
 const timetableRoute = require("./routes/Timetable")

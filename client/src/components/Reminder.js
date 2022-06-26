@@ -83,7 +83,7 @@ const deleteReminder = (event) => {
 }
   
   return (
-    <div> 
+    <div title="reminder"> 
         <Stack spacing={4}>
           <Heading as='h4' size='md'> Upcoming Events </Heading>
           <Box>

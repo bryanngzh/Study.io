@@ -161,7 +161,7 @@ const Nusmods = () => {
             <Button colorScheme='blue' mr={3} onClick={onClose}>
               Close
             </Button>
-            <Button colorScheme='orange' onClick={() => addAllModules()}>Update</Button>
+            <Button colorScheme='orange' onClick={() => { addAllModules(); onClose(); }}>Update</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
