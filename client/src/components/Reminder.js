@@ -33,7 +33,7 @@ const Reminder = () => {
   
   const [reminders, setReminders] = useState([])
 
-  const colors = ["green", "red", "blue", "purple"]
+  const colors = ["green", "red", "blue", "purple", "cyan", "pink", "orange", "teal"]
 
   const detailedTime = ["00:00", "00:10", "00:20", "00:30", "00:40", "00:50", "01:00", "01:10", "01:20",
     "01:30", "01:40", "01:50", "02:00", "02:10", "02:20", "02:30", "02:40", "02:50", "03:00", "03:10",
@@ -109,7 +109,7 @@ const deleteReminder = (event) => {
                                             {reminder.event}
                                         </Td>
                                         <Td>
-                                            <Badge colorScheme={colors[Math.floor(Math.random()*3)]}> { reminder.tags }</Badge>
+                                            <Badge colorScheme={colors[reminder.event.charCodeAt(0)%8]}> { reminder.tags }</Badge>
                                         </Td>
                                         <Td>
                                             {reminder.notes}

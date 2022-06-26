@@ -22,10 +22,14 @@ import {
   Stack,
   useColorMode,
   Center,
+  Drawer,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
 
-const Links = ['dashboard', 'notes'];
+const Links = ['dashboard','notes'];
 
 const NavigationBar = () => {
 
@@ -122,18 +126,37 @@ const NavigationBar = () => {
               </Stack>
           </Flex>
         </Flex>
+          <Drawer
+            isOpen={isOpen}
+            placement='left'
+            onClose={onClose}
+            size="xs"
+          >
+            <DrawerOverlay />
+              <DrawerContent w="200px" maxW="200px">
+                <Stack as={'nav'} spacing={4} p={5}>
+                  {authState.status ? (
+                      Links.map((link) => (
+                        <Link to={"/" + link} onClick={onClose} >{link.charAt(0).toUpperCase() + link.slice(1)}</Link>
+                      )) 
+                    ) : <></>}
+                </Stack>
+              <DrawerCloseButton />
+            </DrawerContent>
+          </Drawer>
+    
 
-        {isOpen ? (
-          <Box pb={4} display={{ md: 'none' }}>
-            <Stack as={'nav'} spacing={4}>
+        {/* {isOpen ? (
+          <Box pb={4} display={{ md: 'none' }} z-index={10} position="absolute">
+            <Stack as={'nav'} spacing={4} >
             {authState.status ? (
                 Links.map((link) => (
-                  <Link to={"/" + link}>{link.charAt(0).toUpperCase() + link.slice(1)}</Link>
+                  <Link to={"/" + link}  >{link.charAt(0).toUpperCase() + link.slice(1)}</Link>
                 )) 
               ) : <></>}
             </Stack>
           </Box>
-        ) : null}
+        ) : null} */}
       </Box>
     </>
   );
