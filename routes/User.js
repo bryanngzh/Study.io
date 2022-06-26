@@ -109,10 +109,17 @@ router.post("/updatePassword", validateToken, async (req, res) => {
         if (!match) {
             res.json({ error: "Wrong Password Entered!" });
         } else {
-            bcrypt.hash(newPassword, 10).then((hash) => {
-                UserModel.findByIdAndUpdate(req.user.id, {password: hash}).exec()
-                res.json("SUCCESS")
-            })
+            const temp = validatePassword(newPassword);
+            if (temp === 1) {
+                res.json({ error: "Password should not contain a space" });
+            } else if (temp === 3) {
+                res.json({ error: "Password must contain at least 1 special character. eg: !,?,@,$" });
+            } else {
+                bcrypt.hash(newPassword, 10).then((hash) => {
+                    UserModel.findByIdAndUpdate(req.user.id, {password: hash}).exec()
+                    res.json("SUCCESS")
+                })
+            }
         }    
     })
 })
@@ -147,4 +154,7 @@ router.get('/auth', validateToken, (req, res) => {
     res.json(req.user)
 })
 
-module.exports = router
+module.exports = {
+    router,
+    validatePassword
+}

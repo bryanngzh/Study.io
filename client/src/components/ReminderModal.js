@@ -44,7 +44,7 @@ const ReminderModal = () => {
     const makeDetailedTiming = () => {
         const box = [];
         for (let i = 0; i < detailedTime.length; i++) {
-          box.push(<option value={i}>{detailedTime[i]}</option>)
+          box.push(<option value={i} key={"timeReminder" + i}>{detailedTime[i]}</option>)
         }
         return box;
     }

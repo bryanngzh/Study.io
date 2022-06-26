@@ -55,8 +55,8 @@ const Profile = () => {
   const updatePassword = () => {
     if (newPassword !== confirmNewPassword) {
       alert("New passwords do not match!")
-    } else if (newPassword.length < 3){
-      alert("New password has to have at least 3 characters!")
+    } else if (newPassword.length < 6){
+      alert("New password has to have at least 6 characters!")
     } else {
       axios.post("/api/auth/updatePassword", {
         oldPassword: oldPassword,
@@ -70,9 +70,11 @@ const Profile = () => {
       ).then((res => {
         if (res.data.error) {
           alert(res.data.error);
+        } else {
+          onClose()
         }
       }))
-      onClose()
+      
     }
   }
 

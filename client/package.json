@@ -56,6 +56,8 @@
   },
   "proxy": "http://localhost:3001/",
   "devDependencies": {
+    "enzyme": "^3.11.0",
+    "jest": "^28.1.1",
     "sass": "^1.53.0"
   }
 }
