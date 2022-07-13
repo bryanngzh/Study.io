@@ -24,7 +24,7 @@ const Reminder = new mongoose.Schema(
         notes: {
             type: String,
         }, 
-        isReminded: {
+        isExpired: {
             type: Boolean,
             required: true,
         },
