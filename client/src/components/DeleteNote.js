@@ -34,7 +34,7 @@ const DeleteNote = (props) => {
   
 
   return (
-    <>
+    <div title="deleteNote">
       <Button onClick={onOpen} variant="ghost"><DeleteIcon/></Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -58,7 +58,7 @@ const DeleteNote = (props) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </>
+    </div>
   )
 }
 

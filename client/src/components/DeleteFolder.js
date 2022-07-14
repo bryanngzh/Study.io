@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react'
 import { DeleteIcon } from '@chakra-ui/icons'
 import axios from 'axios'
+import React from 'react'
 
 const DeleteFolder = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -34,7 +35,7 @@ const DeleteFolder = (props) => {
   
 
   return (
-    <>
+    <div title="deletefolder">
       <Button onClick={onOpen} variant='ghost' size='sm'><DeleteIcon/></Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -58,7 +59,7 @@ const DeleteFolder = (props) => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </>
+    </div>
   )
 }
 

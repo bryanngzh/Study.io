@@ -61,7 +61,7 @@ const TimetableSettings = () => {
   }
 
   return (
-    <>
+    <div title="TimetableSettings">
       <Button onClick={onOpen} colorScheme="blue" variant="solid"><SettingsIcon /></Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
@@ -91,7 +91,7 @@ const TimetableSettings = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </>
+    </div>
   )
 }
 

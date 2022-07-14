@@ -77,7 +77,7 @@ const ReminderModal = () => {
     }
 
     return (
-    <>
+    <div title="ReminderModal">
         <Button onClick={onOpen} colorScheme='black' variant='outline' size='md'> + Add Event </Button>
         <Modal onClose={onClose} isOpen={isOpen} isCentered>
         <ModalOverlay />
@@ -149,7 +149,7 @@ const ReminderModal = () => {
             </ModalFooter>
         </ModalContent>
         </Modal>
-    </>
+    </div>
     )
 }
 
