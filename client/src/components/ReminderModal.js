@@ -49,12 +49,14 @@ const ReminderModal = () => {
         return box;
     }
 
+    
     const addReminder = (e) => {
         e.preventDefault()
         if (message.length > 0 && tag.length > 0) {
+            setDate(date.setTime(date.getTime() + (8 * 60 * 60 * 1000)))
             axios.post("/api/reminder/addReminder", {
             date: date, startTime: drawerTime, endTime: drawerEndTime, 
-            event: message, tags: tag, notes: note, isReminded: false,
+            event: message, tags: tag, notes: note, isExpired: false,
             }, {
                 headers: {
                     accessToken: localStorage.getItem("accessToken")

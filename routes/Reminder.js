@@ -27,7 +27,7 @@ router.post("/addReminder", validateToken, async (req, res) => {
         event: req.body.event,
         tags: req.body.tags,
         notes: req.body.notes,
-        isReminded: req.body.isReminded,
+        isExpired: req.body.isExpired,
         email: req.user.email,
     })
     res.json("SUCCESS")
