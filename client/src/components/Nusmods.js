@@ -130,7 +130,7 @@ const Nusmods = () => {
   }
 
   return (
-    <>
+    <div title="Nusmods">
       <Button onClick={onOpen} colorScheme='orange' variant='solid'>NUSMODS</Button>
 
       <Modal isOpen={isOpen} onClose={onClose} size="xl">
@@ -165,7 +165,7 @@ const Nusmods = () => {
           </ModalFooter>
         </ModalContent>
       </Modal>
-    </>
+    </div>
   )
 
 }

@@ -33,7 +33,7 @@ const TelegramModal = () => {
     }, [token])
 
     return (
-        <>
+        <div title="TelegramModal">
         <Button colorScheme='telegram' leftIcon={<FaTelegram />} onClick={onOpen} size='md' variant='outline'>
             Telegram
         </Button>
@@ -55,7 +55,7 @@ const TelegramModal = () => {
             </ModalFooter>
         </ModalContent>
         </Modal>
-    </>
+    </div>
     )
 }
 

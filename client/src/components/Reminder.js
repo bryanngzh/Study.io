@@ -103,7 +103,7 @@ const deleteReminder = (event) => {
                                   <Tr>
                                       <>
                                         <Td>
-                                            {reminder.date.split("T")[0] + " @ " + detailedTime[reminder.startTime] + " - " + detailedTime[reminder.endTime]}
+                                            {reminder.date + " @ " + detailedTime[reminder.startTime] + " - " + detailedTime[reminder.endTime]}
                                         </Td>
                                         <Td>
                                             {reminder.event}

@@ -20,8 +20,9 @@ router.get("/", validateToken, async (req, res) => {
 
 // Add Reminder
 router.post("/addReminder", validateToken, async (req, res) => {
+    const temp = req.body.date.split("T")[0]
     ReminderModel.create({
-        date: req.body.date,
+        date: temp,
         startTime: req.body.startTime,
         endTime: req.body.endTime,
         event: req.body.event,
