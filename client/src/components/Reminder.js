@@ -27,13 +27,18 @@ import { IconButton } from '@chakra-ui/react'
 import { DeleteIcon } from '@chakra-ui/icons'
 import { FaTelegram } from 'react-icons/fa'
 import TelegramModal from './TelegramModal'
+import ReminderClearModal from './ReminderClearModal'
+import { Divider } from '@chakra-ui/react'
+import { Text, Highlight } from '@chakra-ui/react'
+
 
 
 const Reminder = () => {
   
   const [reminders, setReminders] = useState([])
+  const [toggle, setToggle] = useState(false)
 
-  const colors = ["green", "red", "blue", "purple", "cyan", "pink", "orange", "teal"]
+  const colors = ["green", "yellow", "blue", "purple", "cyan", "pink", "orange", "teal"]
 
   const detailedTime = ["00:00", "00:10", "00:20", "00:30", "00:40", "00:50", "01:00", "01:10", "01:20",
     "01:30", "01:40", "01:50", "02:00", "02:10", "02:20", "02:30", "02:40", "02:50", "03:00", "03:10",
@@ -81,9 +86,15 @@ const deleteReminder = (event) => {
       }
   })
 }
+
+// const clearExpired = () => {
+//   reminders.filter(x => x.isExpired === true).map(y => deleteReminder(y));
+// }
   
   return (
     <div title="reminder"> 
+      <Stack spacing={4}>
+        <Box>
         <Stack spacing={4}>
           <Heading as='h4' size='md'> Upcoming Events </Heading>
           <Box>
@@ -99,7 +110,11 @@ const deleteReminder = (event) => {
                           </Tr>
                           </Thead>
                           <Tbody>
-                              {reminders.map(reminder => (
+                              {reminders.filter(x => !x.isExpired).sort(function(a,b){
+                                  return a.startTime - b.startTime
+                                }).sort(function(a,b){
+                                  return new Date(a.date) - new Date(b.date)
+                                }).map(reminder => (
                                   <Tr>
                                       <>
                                         <Td>
@@ -131,21 +146,114 @@ const deleteReminder = (event) => {
                           </Tfoot>
                       </Table>
                   </TableContainer>
+                    <Flex>  
+                      <Spacer />
+                      <HStack spacing={2}>
+                      <Button colorScheme='black' onClick={() => setToggle(!toggle)} variant='outline'> {!toggle ? <Text> Show Expired</Text> : <Text> Hide Expired</Text> }  </Button>
+                      <ReminderModal />
+                      <TelegramModal />
+                      </HStack>
+                    </Flex>
                   </Box> 
                 </Stack>
-                
-                  <Box>
-                  <Flex>  
-                    <Spacer />
-                    <HStack spacing={2}>
-                    <ReminderModal />
-                    <TelegramModal />
-                    </HStack>
-                  </Flex>
-
+          </Box>
+          <Box>
+            
+          </Box>
+          { toggle 
+            ?
+              reminders.filter(x => x.isExpired).length > 0 ?
+              <>
+              <Divider />
+              <Box>
+              <Stack spacing={4}>
+              <Heading as='h4' size='md'> Expired Events </Heading>
+              <Box>
+                <TableContainer>
+                          <Table variant='simple' size="md" className="table-tiny">
+                              <Thead>
+                              <Tr>
+                                  <Th> Date </Th>
+                                  <Th> Event </Th>
+                                  <Th> Tags </Th>
+                                  <Th> Notes </Th>
+                                  <Th> </Th>
+                              </Tr>
+                              </Thead>
+                              <Tbody>
+                                  {reminders.filter(x => x.isExpired).sort(function(a,b){
+                                      return a.startTime - b.startTime
+                                    }).sort(function(a,b){
+                                      return new Date(a.date) - new Date(b.date)
+                                    }).map(reminder => (
+                                      <Tr>
+                                          <>
+                                            <Td>
+                                                <Text color='red'>
+                                                  {reminder.date + " @ " + detailedTime[reminder.startTime] + " - " + detailedTime[reminder.endTime]}
+                                                </Text>
+                                            </Td>
+                                            <Td>
+                                                <Text color='red'>
+                                                  {reminder.event}
+                                                </Text>
+                                            </Td>
+                                            <Td>
+                                                <Badge colorScheme='red'> { reminder.tags }</Badge>
+                                            </Td>
+                                            <Td>
+                                                <Text color='red'>
+                                                  {reminder.notes}
+                                                </Text>
+                                            </Td>
+                                            <Td>
+                                              <IconButton variant="ghost" size="sm" icon={<DeleteIcon />} onClick={() => deleteReminder(reminder)} />
+                                            </Td>
+                                          </>
+                                      </Tr>
+                                  ))}
+                              </Tbody>
+                              <Tfoot>
+                                <Tr>
+                                    <Th> </Th>
+                                    <Th isNumeric> </Th>
+                                    <Th> </Th>
+                                    <Th> </Th>
+                                </Tr>
+                              </Tfoot>
+                          </Table>
+                      </TableContainer>
+                      </Box> 
+                    </Stack>
+                    <Flex>  
+                          <Spacer />
+                          <HStack spacing={2}>
+                          {/* <Button colorScheme='black' variant='outline' size='md' onClick={() => clearExpired()}>
+                            Clear All
+                          </Button> */}
+                          <ReminderClearModal />
+                          </HStack>
+                        </Flex>
                     
-                  </Box>  
-
+              </Box>
+              </>
+              : 
+              <>
+              <Divider />
+              <Center>
+                <Heading  size='md'>
+                  <Highlight
+                    query='You do not have any expired events.'
+                    styles={{ px: '2', py: '1', rounded: 'full', bg: 'red.100' }}
+                  >
+                    You do not have any expired events.
+                  </Highlight>
+                </Heading>
+              </Center>
+              </>
+            : <> </>
+            }
+        </Stack>
     </div>
   )
 }

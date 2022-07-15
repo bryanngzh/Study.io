@@ -51,32 +51,33 @@ const ReminderModal = () => {
 
     
     const addReminder = () => {
+        var temp = date.setTime(date.getTime() + (8 * 60 * 60 * 1000))
+        var today = new Date()
+        var temp2 = today.setTime(today.getTime() + (0 * 60 * 60 * 1000))
         if (message.length > 0 && tag.length > 0) {
-            setDate(date.setTime(date.getTime() + (8 * 60 * 60 * 1000)))
-            var tempDate = new Date();
-            tempDate.setTime(tempDate.getTime() + (8 * 60 * 60 * 1000))
-            if (date < tempDate) {
-                alert("Please put proper date");
-                return;
+            if (temp2 - temp > 0) {
+                alert("Please enter a valid date!")
+            } else {
+                setDate(date.setTime(date.getTime() + (8 * 60 * 60 * 1000)))
+                axios.post("/api/reminder/addReminder", {
+                date: date, startTime: drawerTime, endTime: drawerEndTime, 
+                event: message, tags: tag, notes: note, isExpired: false,
+                }, {
+                    headers: {
+                        accessToken: localStorage.getItem("accessToken")
+                    },
+                }).then((response) => {
+                    if (response.data.error) {
+                        alert(response.data.error)
+                    } else {
+                        // setReminders([...reminders, response.data])
+                        setDate(new Date())
+                        setMessage("")
+                        setTag("")
+                        setNote("")
+                    }
+                })
             }
-            axios.post("/api/reminder/addReminder", {
-            date: date, startTime: drawerTime, endTime: drawerEndTime, 
-            event: message, tags: tag, notes: note, isExpired: false,
-            }, {
-                headers: {
-                    accessToken: localStorage.getItem("accessToken")
-                },
-            }).then((response) => {
-                if (response.data.error) {
-                    alert(response.data.error)
-                } else {
-                    // setReminders([...reminders, response.data])
-                    setDate(new Date())
-                    setMessage("")
-                    setTag("")
-                    setNote("")
-                }
-            })
         } else {
             alert("Please add a reminder!")
         }
