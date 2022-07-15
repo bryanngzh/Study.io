@@ -33,6 +33,26 @@ router.post("/delete", validateToken, async (req, res) => {
   }
 })
 
+//update timetable activity
+router.post("/change", validateToken, async (req, res) => {
+  try {
+    await TimetableModel.findByIdAndUpdate(req.body._id, {
+      name: req.body.name,
+      day: req.body.day,
+      startTime: req.body.startTime,
+      endTime: req.body.endTime,
+      location: req.body.location,
+      frequency: req.body.frequency,
+      additionalInfo: req.body.additionalInfo,
+      colour: req.body.colour,
+      code: req.body.code,
+    }).exec()
+    res.json("SUCCESS")
+  } catch (error) {
+    res.json("Error")
+  }
+})
+
 //change timetable activity
 
 
