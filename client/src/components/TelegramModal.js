@@ -7,7 +7,7 @@ import {
     ModalFooter,
     ModalBody,
     ModalCloseButton, useDisclosure, Button, HStack, VStack, FormControl, Box, Select, Stack, Input,
-    FormLabel, Heading,
+    FormLabel, Heading, useClipboard, Flex,
   } from '@chakra-ui/react'
 import axios from 'axios'
 import { FaTelegram } from 'react-icons/fa'
@@ -15,6 +15,8 @@ import { FaTelegram } from 'react-icons/fa'
 const TelegramModal = () => {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [token, setToken] = useState(" ")
+    const { hasCopied, onCopy } = useClipboard(token)
+
 
     useEffect(() => {
         if (localStorage.getItem("accessToken")) {
@@ -44,11 +46,12 @@ const TelegramModal = () => {
             <ModalCloseButton />
             <ModalBody>
             <FormLabel htmlFor='amount'>Your unique token_id:</FormLabel>
-            <Input
-                size="md" 
-                value={token}
-                type="text"
-            />
+            <Flex mb={2}>
+              <Input value={token} isReadOnly placeholder='Welcome' />
+              <Button onClick={onCopy} ml={2}>
+                {hasCopied ? 'Copied' : 'Copy'}
+              </Button>
+            </Flex>
             </ModalBody>
             <ModalFooter>
             <Button onClick={onClose}>Close</Button>
