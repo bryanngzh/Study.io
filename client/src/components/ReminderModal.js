@@ -50,10 +50,15 @@ const ReminderModal = () => {
     }
 
     
-    const addReminder = (e) => {
-        e.preventDefault()
+    const addReminder = () => {
         if (message.length > 0 && tag.length > 0) {
             setDate(date.setTime(date.getTime() + (8 * 60 * 60 * 1000)))
+            var tempDate = new Date();
+            tempDate.setTime(tempDate.getTime() + (8 * 60 * 60 * 1000))
+            if (date < tempDate) {
+                alert("Please put proper date");
+                return;
+            }
             axios.post("/api/reminder/addReminder", {
             date: date, startTime: drawerTime, endTime: drawerEndTime, 
             event: message, tags: tag, notes: note, isExpired: false,
@@ -87,10 +92,10 @@ const ReminderModal = () => {
             <ModalHeader>Add a Reminder</ModalHeader>
             <ModalCloseButton />
             <ModalBody>
-            <form
+            {/* <form
                 id="new-form"
                 onSubmit={addReminder}
-                >
+                > */}
                 <FormControl>
                     <Stack>
                         <Box>
@@ -144,10 +149,10 @@ const ReminderModal = () => {
                         </Box>
                     </Stack>
                 </FormControl>
-            </form>
+            {/* </form> */}
             </ModalBody>
             <ModalFooter>
-            <Button type="submit" form="new-form">Add</Button>
+            <Button type="submit" form="new-form" onClick={() => addReminder()}>Add</Button>
             </ModalFooter>
         </ModalContent>
         </Modal>

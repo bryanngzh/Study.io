@@ -44,7 +44,8 @@ import axios from "axios"
 import { SettingsIcon } from '@chakra-ui/icons'
 import Nusmods from './Nusmods';
 import TimetableSettings from './TimetableSettings';
-import timeArray  from "./Time";
+import timeArray from "./Time";
+import TimetableEdit from './TimetableEdit';
 
 const Timetable = () => {
 
@@ -221,7 +222,7 @@ const Timetable = () => {
 
   //edit function useStates
   const [editTitle, setEditTitle] = useState("");
-  const [editMode, setEditMode] = useState(true);
+
 
   //using array overlap to fill in the activity block 
   const addActivity = (item) => {
@@ -312,7 +313,6 @@ const Timetable = () => {
               role="button" colSpan={finalLength}
               boxShadow='md'
               bg={overlayColors[item.colour]} color="black" rounded='md' height={20}
-              onClick={() => setEditMode(true)}
             >
               <Text fontSize='sm'>{finalLength > 4 ? item.name : ""}</Text>
               <Text fontSize='xs'>{finalLength > 4 ? detailedTime[item.startTime] + " - " + detailedTime[item.endTime]: ""}</Text>
@@ -320,7 +320,6 @@ const Timetable = () => {
               <Text fontSize='xs'>{finalLength > 4 ? item.location : ""}</Text>
             </GridItem>
           </PopoverTrigger>
-          {editMode ?
           <PopoverContent color='white' bg='blue.800' borderColor='blue.800'>
             <PopoverHeader pt={4} fontWeight='bold' border='0'>
                 {item.name}
@@ -342,57 +341,13 @@ const Timetable = () => {
               >
               <Box fontSize='sm'></Box>
             <ButtonGroup size='sm'>
-              <Button colorScheme='green' onClick={() => setEditMode(false)}>Edit</Button>
+                <TimetableEdit details={item} />
               <Button colorScheme='red' onClick={() => deleteActivity(item)}>
                 Delete
             </Button>
           </ButtonGroup>
         </PopoverFooter>
             </PopoverContent>
-            :
-          <PopoverContent color='white' bg='blue.800' borderColor='blue.800'>
-            <PopoverHeader pt={4} fontWeight='bold' border='0'>
-              Title <Input htmlSize={4} width='auto' defaultValue={item.name} />
-            </PopoverHeader>
-            <PopoverCloseButton />
-              <PopoverBody>
-                <Stack direction='row' position="relative">
-                  <Center><Text>Time</Text></Center>
-                  <Select id='editStartTime' defaultValue={item.startTime} onChange={(e) => setDrawerTime(e.target.value)}>
-                    {timeArray}
-                  </Select>
-                  <Center><Text>-</Text></Center>
-                  <Select id='editEndTime' defaultValue={item.endTime} onChange={(e) => setDrawerEndTime(e.target.value)}>
-                    {timeArray}
-                  </Select>
-                </Stack>
-                <Stack direction='row' position="relative">
-                  <Center><Text>Location</Text></Center><Input width='auto' defaultValue={item.location} />
-                </Stack>
-                <Stack direction='row' position="relative">
-                  <Center><Text>Frequency</Text></Center><Input width='auto' defaultValue={item.frequency} />
-                </Stack>
-                <Text>Additional Info</Text>
-                <Textarea width='auto' defaultValue={item.additionalInfo} />
-
-                
-              </PopoverBody>
-              <PopoverFooter
-                border='0'
-                display='flex'
-                alignItems='center'
-                justifyContent='space-between'
-                pb={4}
-              >
-              <Box fontSize='sm'></Box>
-            <ButtonGroup size='sm'>
-              {/* <Button colorScheme='green' onClick={() => }>Edit</Button> */}
-              <Button colorScheme='orange'>
-                Save
-            </Button>
-          </ButtonGroup>
-        </PopoverFooter>
-      </PopoverContent>}
     </Popover>
       for (let i = first + 1; i < first + finalLength; i++) {
         arr[i % 144] = empty;
