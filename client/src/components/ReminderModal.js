@@ -51,16 +51,24 @@ const ReminderModal = () => {
 
     
     const addReminder = () => {
-        var temp = date.setTime(date.getTime() + (8 * 60 * 60 * 1000))
-        var today = new Date()
-        var temp2 = today.setTime(today.getTime() + (0 * 60 * 60 * 1000))
+        var temp = new Date()
+        var selectedDate = date
+
+        selectedDate.setTime(selectedDate.getTime() + (8 * 60 * 60 * 1000))
+        temp.setTime(temp.getTime() + (8 * 60 * 60 * 1000))
+
+        selectedDate = selectedDate.toISOString();
+        temp = temp.toISOString();
+
+        selectedDate = selectedDate.split("T")[0]
+        temp = temp.split("T")[0]
+
         if (message.length > 0 && tag.length > 0) {
-            if (temp2 - temp > 0) {
+            if (selectedDate < temp) {
                 alert("Please enter a valid date!")
             } else {
-                setDate(date.setTime(date.getTime() + (8 * 60 * 60 * 1000)))
                 axios.post("/api/reminder/addReminder", {
-                date: date, startTime: drawerTime, endTime: drawerEndTime, 
+                date: selectedDate, startTime: drawerTime, endTime: drawerEndTime, 
                 event: message, tags: tag, notes: note, isExpired: false,
                 }, {
                     headers: {
