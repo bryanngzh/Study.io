@@ -314,7 +314,7 @@ const Timetable = () => {
               boxShadow='md'
               bg={overlayColors[item.colour]} color="black" rounded='md' height={20}
             >
-              <Text fontSize='sm'>{finalLength > 4 ? item.name.split(" ")[0] : ""}</Text>
+              <Text fontSize='sm'>{finalLength > 4 ? item.nusmods ? item.name.split(" ")[0] : item.name : ""}</Text>
               <Text fontSize='xs'>{finalLength > 4 ? detailedTime[item.startTime] + " - " + detailedTime[item.endTime]: ""}</Text>
               <Text fontSize='xs'>{finalLength > 4 ? item.code : ""}</Text>
               <Text fontSize='xs'>{finalLength > 4 ? item.location : ""}</Text>
