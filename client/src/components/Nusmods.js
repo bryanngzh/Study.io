@@ -121,9 +121,10 @@ const Nusmods = () => {
       var start = arr[4].substring(0, 5);
       var startTime = detailedTime.indexOf(start);
       var endTime = startTime + duration / 10;
+      var event = message + " Finals"
       axios.post("/api/reminder/addReminder", {
         date: date, startTime: startTime, endTime: endTime, 
-        event: message, tags: "exam", notes: "Finals", isExpired: false,
+        event: event, tags: "exam", notes: "Finals", isExpired: false,
         }, {
             headers: {
                 accessToken: localStorage.getItem("accessToken")
