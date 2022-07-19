@@ -59,6 +59,7 @@ router.post("/editNoteDescription", validateToken, async (req, res) => {
         week: req.body.week,
         note: req.body.note,
         unit: req.body.unit,
+        folder: req.body.folder,
     }).exec()
       res.json("SUCCESS")
   } catch (error) {

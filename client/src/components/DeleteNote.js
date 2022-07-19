@@ -10,13 +10,30 @@ import {
   Button,
   Center,
   ButtonGroup,
-  LightMode
+  LightMode,
+  Tooltip,
 } from '@chakra-ui/react'
 import { DeleteIcon } from '@chakra-ui/icons'
 import axios from 'axios'
 
 const DeleteNote = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
+
+  const temporaryDelete = () => {
+    axios.post("api/notedescription/editNoteDescription", {
+      _id: props.id,
+      folder: "Trash",
+      }, {
+          headers: {
+              accessToken: localStorage.getItem("accessToken")
+          },
+      }).then((response) => {
+          if (response.data.error) {
+              alert(response.data.error)
+          } else {
+          }
+      })
+  }
 
   const deleteNote = () => {
     axios.post("/api/notedescription/deleteNoteDescription", {
@@ -46,7 +63,13 @@ const DeleteNote = (props) => {
             <Center>
               <LightMode>
                 <ButtonGroup gap='3'>
-                  <Button colorScheme="green" onClick={() => { deleteNote(); onClose(); }}>Confirm</Button>
+                  {props.folder === "Trash" ?
+                    <Tooltip label="This will permanently delete the note!" aria-label='A tooltip'>
+                      <Button colorScheme="green" onClick={() => { deleteNote(); onClose(); }}>Confirm</Button>
+                    </Tooltip> : 
+                    <Tooltip label="You can still find this note in the Trash folder." aria-label='A tooltip'>
+                    <Button colorScheme="green" onClick={() => { temporaryDelete(); onClose(); }}>Confirm</Button>
+                    </Tooltip>}
                   <Button onClick={onClose} colorScheme="red">Cancel</Button>
                 </ButtonGroup>
               </LightMode>

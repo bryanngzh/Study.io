@@ -1,6 +1,4 @@
-import "../styles/noteEditor.scss"
-
-
+import "../styles/noteEditor.css"
 import { BubbleMenu, useEditor, EditorContent, FloatingMenu } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Underline from '@tiptap/extension-underline'
@@ -9,9 +7,12 @@ import {
   Button,
   Text,
   Box,
+  Tooltip
 } from "@chakra-ui/react"
+import { FaFilePdf } from "react-icons/fa"
 import { useEffect, useState } from 'react'
 import axios from 'axios'
+import html2pdf from 'html2pdf.js'
 
 const MenuBar = ({ editor }) => {
   if (!editor) {
@@ -197,6 +198,22 @@ const NoteEditor = (props) => {
     setActive(false)
   }
 
+  const exportHtml = () => {
+    var html = editor.getHTML()
+    html = html + "<br>"
+
+    html = '<html><head><link rel = "stylesheet" href = "..//styles//noteEditor.css" ></head> <body>' + html + "</body></html>"
+    console.log(html)
+    var opt = {
+      margin:       1,
+      filename:     props.name,
+      image:        { type: 'jpeg', quality: 0.98 },
+      html2canvas:  { scale: 2, allowTaint:true, useCORS: true },
+      jsPDF:        { unit: 'in', format: 'a4', orientation: 'portrait' }
+    };
+    html2pdf().set(opt).from(html).save();
+  }
+
   return (
     <div title="noteeditor">
       {editor && <BubbleMenu editor={editor} tippyOptions={{ duration: 100 }}>
@@ -269,6 +286,10 @@ const NoteEditor = (props) => {
       </FloatingMenu>}
       {/* <MenuBar editor={editor} /> */}
       <EditorContent editor={editor} />
+      {localStorage.getItem("chakra-ui-color-mode") === "light" ?
+        <Tooltip label="Download as PDF">
+          <Button colorScheme="orange" variant='outline' onClick={() => exportHtml()}><FaFilePdf /></Button>
+        </Tooltip> : <></>}
     </div>
   )
 }
