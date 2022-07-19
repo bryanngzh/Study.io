@@ -34,6 +34,8 @@ import {
   ModalCloseButton,
   useDisclosure,
   Tooltip,
+  Divider,
+  HStack,
 } from '@chakra-ui/react'
 import {
   ArrowLeftIcon,
@@ -43,12 +45,14 @@ import {
   SmallAddIcon,
   ExternalLinkIcon,
 } from '@chakra-ui/icons'
+import { FaHome, FaTrash, FaExpandAlt, FaFilePdf } from 'react-icons/fa';
 import React, { useState, useContext, useEffect } from 'react';
 import { AuthContext } from '../helpers/AuthContext';
 import axios from 'axios';
 import NoteEditor from '../components/NoteEditor';
 import DeleteNote from '../components/DeleteNote';
 import DeleteFolder from '../components/DeleteFolder';
+import SearchNote from '../components/SearchNote';
 import { useNavigate } from "react-router-dom";
 
 const Notes = () => {
@@ -57,7 +61,7 @@ const Notes = () => {
   const color = useColorModeValue("gray.100", "gray.700");
   const [notefolder, setNotefolder] = useState([])
   const [name, setName] = useState('Add a page')
-  const [currentFolder, setCurrentFolder] = useState("")
+  const [currentFolder, setCurrentFolder] = useState("Home")
   const [noteDescriptions, setNoteDescriptions] = useState([])
   const [week, setWeek] = useState("")
   const [unit, setUnit] = useState("")
@@ -68,14 +72,15 @@ const Notes = () => {
   const [noteName, setNoteName] = useState("")
   const [noteID, setNoteID] = useState("");
   const [settings, setSettings] = useState(false);
+  const [fullEditor, setFullEditor] = useState(false);
 
-    let navigate = useNavigate();
+  let navigate = useNavigate();
 
-    useEffect(() => {
-        if (!authState.status) {
-          navigate('/')
-        }
-    })
+  useEffect(() => {
+      if (!authState.status) {
+        navigate('/')
+      }
+  })
 
   //include the adding of the editor storage json when adding row 
   const addRow = (folder) => {
@@ -148,6 +153,14 @@ const Notes = () => {
     if (text === "Add a page") {
       return
     }
+    if (text === "Home") {
+      alert("Cannot have folders with the same name!")
+      return
+    }
+    if (text === "Trash") {
+      alert("Cannot have folders with the same name!")
+      return
+    }
     for (let i = 0; i < notefolder.length; i++) {
       if (text === notefolder[i].title) {
         alert("Cannot have folders with the same name!")
@@ -217,7 +230,19 @@ const Notes = () => {
             </Button>
           </Stack>
           <Stack spacing={0}>
-            <Tooltip label='Feature to be completed' fontSize='md'  placement='right'>
+            <Tooltip label='Home Page' fontSize='md'  placement='right'>
+              <Flex role="button" _hover={{ bg: color }} height="35px" width="300px" onClick={() => { setCurrentFolder("Home"); setFullEditor(false); }}>
+                <Center>
+                  &nbsp;
+                  &nbsp;
+                  &nbsp;
+                <FaHome />
+                &nbsp;
+                <Text>Home</Text>
+                </Center>
+              </Flex>
+            </Tooltip>
+            {/* <Tooltip label='Feature to be completed' fontSize='md'  placement='right'>
               <Flex role="button" _hover={{ bg: color}} height="35px" width="300px">
                 <Center>
                   &nbsp;
@@ -227,8 +252,9 @@ const Notes = () => {
                 &nbsp;
                 <Text>Search</Text>
                 </Center>
-                </Flex>
-              </Tooltip>
+              </Flex>
+            </Tooltip> */}
+            <SearchNote />
             <Tooltip label='Click to toggle delete' fontSize='md'  placement='right'>
               <Flex role="button" _hover={{ bg: color }} height="35px" width="300px" onClick={() => {setSettings(!settings)}}>
                 <Center>
@@ -243,7 +269,7 @@ const Notes = () => {
             </Tooltip>
           </Stack>
           <Stack spacing={0}>
-            <Text p={4}>Notefolder</Text>
+            <Heading p={4} as='h4' size='md'>Notefolder's</Heading>
             {notefolder.map(x =>
               <Flex>
                 <Flex
@@ -251,7 +277,7 @@ const Notes = () => {
                   _hover={{ bg: color }}
                   height="35px"
                   width="300px"
-                  onClick={() => { setCurrentFolder(x.title) }}>
+                  onClick={() => { setCurrentFolder(x.title); setFullEditor(false) }}>
                   &nbsp;
                   &nbsp;
                   <Center>{x.title}</Center>
@@ -272,29 +298,62 @@ const Notes = () => {
                 </Editable>
                 </Center>
             </Flex>
+            
+            <Tooltip label='Restore Deleted Notes' fontSize='md'  placement='right'>
+              <Flex
+                top="20px"
+                position="relative"
+                role="button"
+                _hover={{ bg: color }}
+                height="35px"
+                width="300px"
+                onClick={() => { setCurrentFolder("Trash"); setFullEditor(false) }}>
+                <Center>
+                  &nbsp;
+                  &nbsp;
+                  &nbsp;
+                <FaTrash />
+                &nbsp;
+                <Text>Trash</Text>
+                </Center>
+              </Flex>
+            </Tooltip>
           </Stack>
-
         </Box> :
         <Box p={2}>
           <Button onClick={() => setOpen(true)} variant='ghost' top="6px" left="9px" >
             <HamburgerIcon w={5} h={5} />
           </Button>
         </Box>}
-      <Box p={5}   width = '100%' height = "100%">
+      
+      {fullEditor ?
+        <Box p={5} w="100%" height="100%" overflowY="auto">
+          <Center>
+            <Stack minWidth="800px" maxWidth="800px">
+              <Flex>
+                <Heading>{noteName ? noteName : "Untitled"}</Heading>
+                <Spacer />
+                
+              </Flex>
+              <NoteEditor name={noteName} id={noteID} />
+            </Stack>
+          </Center>
+        </Box>
+      : <Box p={5} width='100%' height="100%">
         <Box left={40}>
           <Heading>{currentFolder ? currentFolder : "Click/Create a Notefolder to get Started!"}</Heading>
-          </Box>
-          <TableContainer>
-            <Table variant='simple' size="md">
-              <TableCaption role="button" _hover={{ bg: color }} onClick={() => {addRow(currentFolder)}}>+ New</TableCaption>
-              <Thead>
-                <Tr>
-                  <Th>Week</Th>
-                  <Th>Topic/Lesson</Th>
-                  <Th>Unit/modules</Th>
-                  {settings ? <Th isNumeric>Delete</Th> : <></>}
-                </Tr>
-              </Thead>
+        </Box>
+        <TableContainer>
+          <Table variant='simple' size="md">
+            <TableCaption role="button" _hover={{ bg: color }} onClick={() => { addRow(currentFolder) }}>+ New</TableCaption>
+            <Thead>
+              <Tr>
+                <Th>Week</Th>
+                <Th>Topic/Lesson</Th>
+                <Th>Unit/modules</Th>
+                {settings ? <Th isNumeric>Delete</Th> : <></>}
+              </Tr>
+            </Thead>
             <Tbody>
               {noteDescriptions.filter(note => note.folder === currentFolder).map(note => {
                 return (
@@ -302,22 +361,22 @@ const Notes = () => {
                     {/* <Td role="button" _hover={{ bg: color }}><Tag colorScheme='blue'>Week {note.week}</Tag></Td> */}
                     <Td>
                       <Menu isLazy>
-                          <MenuButton onClick={() => {note.week ? setWeek(note.week) : setWeek("click to edit")}}>
-                            {note.week ? note.week : <Text as="em">untitled</Text>}
-                          </MenuButton>
-                          <MenuList>
-                            <Editable value={week} p={2} onSubmit={() => {editWeek(note, week)}} >
-                              <EditablePreview/>
-                            <EditableInput onChange={(e) => setWeek(e.target.value)}/>
-                            </Editable>
-                          </MenuList>
+                        <MenuButton onClick={() => { note.week ? setWeek(note.week) : setWeek("click to edit") }}>
+                          {note.week ? note.week : <Text as="em">untitled</Text>}
+                        </MenuButton>
+                        <MenuList>
+                          <Editable value={week} p={2} onSubmit={() => { editWeek(note, week) }} >
+                            <EditablePreview />
+                            <EditableInput onChange={(e) => setWeek(e.target.value)} />
+                          </Editable>
+                        </MenuList>
                       </Menu>
                     </Td>
 
                     <Td
                       _hover={{ bg: color }}
                       onMouseOver={() => { setButtonOpacity(1); setCurrentFocus(note._id) }}
-                      onMouseLeave={() => { setButtonOpacity(0); setCurrentFocus("")}}>
+                      onMouseLeave={() => { setButtonOpacity(0); setCurrentFocus("") }}>
                       <Flex>
                         <Menu isLazy>
                           <MenuButton onClick={() => { note.note ? setTopic(note.note) : setTopic("click to edit") }}>
@@ -344,31 +403,40 @@ const Notes = () => {
                     </Td>
                     <Td>
                       <Menu isLazy>
-                        <MenuButton onClick={() => {note.unit ? setUnit(note.unit) : setUnit("click to edit")}}>
+                        <MenuButton onClick={() => { note.unit ? setUnit(note.unit) : setUnit("click to edit") }}>
                           {note.unit ? note.unit : <Text as="em">untitled</Text>}
                         </MenuButton>
                         <MenuList>
-                          <Editable value={unit} p={2} onSubmit={() => {editUnit(note, unit)}} >
-                            <EditablePreview/>
-                            <EditableInput onChange={(e) => setUnit(e.target.value)}/>
+                          <Editable value={unit} p={2} onSubmit={() => { editUnit(note, unit) }} >
+                            <EditablePreview />
+                            <EditableInput onChange={(e) => setUnit(e.target.value)} />
                           </Editable>
                         </MenuList>
                       </Menu>
-                      </Td>
-                    {settings ? 
-                    <Td isNumeric><DeleteNote id={note._id} /></Td>
+                    </Td>
+                    {settings ?
+                      <Td isNumeric><DeleteNote id={note._id} folder={currentFolder} /></Td>
                       : <></>}
                   </Tr>
                 )
               })}
               <>
-                <Modal isOpen={isOpen} onClose={onClose} > 
-                  <ModalOverlay bg='blackAlpha.300'/>
+                <Modal isOpen={isOpen} onClose={onClose} >
+                  <ModalOverlay bg='blackAlpha.300' />
                   <ModalContent maxW="56rem" h="80vh" overflowY="auto">
-                      <ModalHeader>{noteName ? noteName : "Untitled"}</ModalHeader>
-                    <ModalCloseButton />
-                      <ModalBody>
-                      <NoteEditor name={noteName} id={noteID } />
+                    <ModalHeader>
+                      <Flex>
+                        {noteName ? noteName : "Untitled"}
+                          <Spacer />
+                          <Tooltip label='Open as full page'>
+                            <Button variant='ghost' onClick={() => { setFullEditor(true); onClose(); }}><FaExpandAlt /></Button>
+                          </Tooltip>
+                      </Flex>
+                    </ModalHeader>
+                    {/* <ModalCloseButton /> */}
+                    
+                    <ModalBody>
+                      <NoteEditor name={noteName} id={noteID} />
                     </ModalBody>
                     <ModalFooter>
                       {/* <Button colorScheme='blue' mr={3} onClick={onClose}>
@@ -377,21 +445,20 @@ const Notes = () => {
                       <Button variant='ghost'>Secondary Action</Button> */}
                     </ModalFooter>
                   </ModalContent>
-                  </Modal>
-                </>
-              </Tbody>
-              {/* <Tfoot >
+                </Modal>
+              </>
+            </Tbody>
+            {/* <Tfoot >
                 <Tr >
                   <Th >New</Th>
                 </Tr>
               </Tfoot> */}
-            </Table>
-          </TableContainer>
+          </Table>
+        </TableContainer>
         <Flex></Flex>
-      </Box>
+      </Box>}
     </Stack>
   )
-  
 }
 
 export default Notes

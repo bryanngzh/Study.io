@@ -101,10 +101,11 @@ const Nusmods = () => {
     "2330", "2340", "2350"]
 
   async function moduleFinder(arr) {
-    const moduleName = arr[0];
+    var moduleName = arr[0];
     const String = "https://api.nusmods.com/v2/2022-2023/modules/" + moduleName + ".json";
     const response = await fetch(String);
     const data = await response.json();
+    moduleName = moduleName + " " + data.title
     const colour = Math.floor(Math.random()*7);
     for (let i = 1; i < arr.length; i++) {
       const modInfo = arr[i].split(":");
