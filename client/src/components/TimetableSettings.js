@@ -73,10 +73,10 @@ const TimetableSettings = () => {
             <Stack>
               <LightMode>
                 <Tooltip hasArrow label='This will clear the entire timetable!' placement='right'>
-                  <Button colorScheme="red" variant="solid" onClick={() => clearTimetable()}>Clear Timetable</Button>
+                  <Button colorScheme="red" variant="solid" onClick={() => { clearTimetable(); onClose(); }}>Clear Timetable</Button>
                 </Tooltip>
                 <Tooltip hasArrow label='This will clear activities from NUSMODs' placement='right'>
-                  <Button colorScheme="red" variant="solid" onClick={() => clearNusmods()}>Clear NUSMODs</Button>
+                  <Button colorScheme="red" variant="solid" onClick={() => { clearNusmods(); onClose(); }}>Clear NUSMODs</Button>
                 </Tooltip>
               </LightMode>
             </Stack>
