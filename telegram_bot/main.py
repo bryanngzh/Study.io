@@ -40,6 +40,18 @@ collection_session = db["telegram-session-data"]
 collection_timetable = db["timetable-data"]
 
 #Commands
+@bot.message_handler(commands=['version'])
+def version(message):
+    """
+    Checks the version of the telebot on heroku - devops 
+    """
+
+    chat_id = message.chat.id
+    chat_user = message.chat.username
+
+    message_text = "v2"
+    bot.send_message(chat_id, message_text, parse_mode= 'HTML')
+
 @bot.message_handler(commands=['start'])
 def start(message):
     """
@@ -381,7 +393,8 @@ def reminders(message):
         counter = 1
         for result in results :
                 #Only display non-expired tasks
-                if day_dict.get(result["day"]) == str(datetime.today().date().strftime("%A")):
+                today = datetime.now() + timedelta(hours=8)
+                if day_dict.get(result["day"]) == str(today.strftime("%A")):
                     response += "\n" + "<b>" + detailedTime[int(result["startTime"])] + " - " + detailedTime[int(result["endTime"])] + " (" + result["location"] + ")</b> | " + result["name"] + " | " + result["code"]
                     counter = counter + 1
         if len(response) > 0:
@@ -504,10 +517,12 @@ def send_today_reminders():
 
             for result in results :
                 #Only display non-expired tasks
-                if result["isExpired"] != True and result["date"] == str(datetime.today().date()):
+                today = datetime.now() + timedelta(hours=8)
+                if result["isExpired"] != True and result["date"] == str(today.date()):
                     response += "\n" + str(counter) + ". <b>" + detailedTime[int(result["startTime"])] + " - " + detailedTime[int(result["endTime"])] + "</b> | " + result["event"] 
                     counter = counter + 1
-            bot.send_message(session["chat_id"], response, parse_mode= 'HTML')
+            if counter > 1:
+                bot.send_message(session["chat_id"], response, parse_mode= 'HTML')
             #Else, they need to login first to be able to check their schedule
 
 def send_reminders():
@@ -558,8 +573,7 @@ def send_reminders():
             ("date", 1), ("startTime", 1),
             ]
             )
-            today = datetime.today()
-            three_days_later = today + timedelta(days=3)
+            three_days_later = datetime.now() + timedelta(days=3) + timedelta(hours=8)
             response = "Reminders on " + str(three_days_later).split(" ")[0].split("-")[2] + " " + month_dict.get(str(three_days_later).split(" ")[0].split("-")[1]) + " " + str(three_days_later).split(" ")[0].split("-")[0] + ":"
             counter = 1
             
@@ -568,14 +582,15 @@ def send_reminders():
                 if result["isExpired"] != True and result["date"] == str(three_days_later).split(" ")[0]:
                     response += "\n" + str(counter) + ". <b>" + detailedTime[int(result["startTime"])] + " - " + detailedTime[int(result["endTime"])] + "</b> | " + result["event"] 
                     counter = counter + 1
-            bot.send_message(session["chat_id"], response, parse_mode= 'HTML')
+            if counter > 1:
+                bot.send_message(session["chat_id"], response, parse_mode= 'HTML')
             #Else, they need to login first to be able to check their schedule
 
 
 #Reminder Scheduler
 sched = BackgroundScheduler()    
-sched.add_job(send_today_reminders, trigger="cron", hour=6, minute='00')
-sched.add_job(send_reminders, trigger="cron", hour=18, minute='00')
+sched.add_job(send_today_reminders, trigger="cron", hour=22) #6am - 8 hours
+sched.add_job(send_reminders, trigger="cron", hour=10) #6pm - 8 hours
 sched.start()
 
 # Running the bot
