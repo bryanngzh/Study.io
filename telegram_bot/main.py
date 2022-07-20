@@ -579,10 +579,12 @@ sched.add_job(send_reminders, trigger="cron", hour=18, minute='00')
 sched.start()
 
 # Running the bot
+
 while True:
     try:
         bot.polling()
     except Exception:
         time.sleep(15)
+
 
 
