@@ -15,6 +15,11 @@ const User = new mongoose.Schema(
             type: String,
             required: true
         }, 
+        image: {
+            type: String, 
+            required: false,
+            default: "https://i.postimg.cc/Kjqfbv2m/Screenshot-2022-05-28-at-5-59-42-PM.png"
+        },
     },
     { collection: "user-data" }
 )

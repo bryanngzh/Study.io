@@ -141,6 +141,20 @@ router.post("/updateUsername", validateToken, async (req, res) => {
     })
 })
 
+//update profile picture
+router.post("/updatePicture", validateToken, async (req, res) => {
+    UserModel.findByIdAndUpdate(req.user.id, {image: req.body.image}).exec()
+    res.json("SUCCESS")  
+})
+
+//get profile picture
+router.get("/getPicture", validateToken, async (req, res) => {
+    const user = await UserModel.findOne({
+        email: req.user.email
+    })
+    res.json(user.image)  
+})
+
 //get token_id
 router.get('/token', validateToken, async (req, res) => {
     const user = await UserModel.findOne({
