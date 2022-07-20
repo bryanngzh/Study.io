@@ -22,11 +22,12 @@ bot = telebot.TeleBot(API_KEY)
 bot.set_my_commands([
     BotCommand('start', 'Starts the bot'),
     BotCommand('login', 'Logs user in'),
-    BotCommand('logout', 'Logs user out'),
     BotCommand('reminders', 'Lists all your reminders'),
     BotCommand('exams', 'Lists all your exams'),
     BotCommand('today', 'Lists your timetable for the day'),
     BotCommand('week', 'Lists your timetable for the week'),
+    BotCommand('logout', 'Logs user out'),
+    BotCommand('help', 'Provides information about the bot'),
 ])
 
 # Database setup
@@ -573,8 +574,8 @@ def send_reminders():
 
 #Reminder Scheduler
 sched = BackgroundScheduler()    
-sched.add_job(send_today_reminders, trigger="cron", hour=23, minute='20')
-sched.add_job(send_reminders, trigger="cron", hour=23, minute='20')
+sched.add_job(send_today_reminders, trigger="cron", hour=6, minute='00')
+sched.add_job(send_reminders, trigger="cron", hour=18, minute='00')
 sched.start()
 
 # Running the bot
