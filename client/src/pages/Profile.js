@@ -29,6 +29,7 @@ import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import { AuthContext } from "../helpers/AuthContext";
 import { useNavigate } from "react-router-dom";
+import UploadPicture from '../components/UploadPicture';
 
 const Profile = () => {
   const [oldPassword, setOldPassword] = useState("")
@@ -121,26 +122,7 @@ const Profile = () => {
           User Profile Edit
         </Heading>
         <FormControl id="userName">
-          <FormLabel>User Icon</FormLabel>
-          <Stack direction={['column', 'row']} spacing={6}>
-            <Center>
-              <Avatar size="xl" src="https://bit.ly/sage-adebayo">
-                <AvatarBadge
-                  as={IconButton}
-                  size="sm"
-                  rounded="full"
-                  top="-10px"
-                  colorScheme="red"
-                  aria-label="remove Image"
-                  icon={<SmallCloseIcon />}
-                />
-              </Avatar>
-            </Center>
-            <Center w="full">
-              {/* <Button w="full" >Change Icon</Button> */}
-              <input type="file" />
-            </Center>
-          </Stack>
+          <UploadPicture />
         </FormControl>
         {/* <FormControl id="userName" isRequired>
           <FormLabel>Username</FormLabel>

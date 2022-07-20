@@ -3,11 +3,14 @@ const express = require("express")
 const app = express()
 const mongoose = require("mongoose")
 const cors = require("cors")
+const bodyParser = require("body-parser");
 
 // MongoDB
 mongoose.connect("mongodb+srv://bryan:bryan@cluster0.fmdfb.mongodb.net/studyio?retryWrites=true&w=majority") 
 
 // Middleware
+app.use(bodyParser.json({limit: '5mb'}));
+app.use(bodyParser.urlencoded({limit: '5mb', extended: true}));
 app.use(express.json()) // to allow json change to parse for API calls
 app.use(cors()); // to connect FE to BE
 

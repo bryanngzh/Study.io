@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../helpers/AuthContext';
-import { ReactNode } from 'react';
+import { ImageContext } from '../helpers/ImageContext';
+import { useState, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
 import {
   Box,
@@ -28,6 +29,8 @@ import {
   DrawerCloseButton,
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
+import axios from 'axios';
+import { set } from 'mongoose';
 
 const Links = ['dashboard','notes'];
 
@@ -37,6 +40,7 @@ const NavigationBar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const { authState, setAuthState } = useContext(AuthContext);
+  const { imageState, setImageState } = useContext(ImageContext)
   const linkColor = useColorModeValue('gray.600', 'gray.200');
   const linkHoverColor = useColorModeValue('gray.800', 'white');
 
@@ -44,8 +48,22 @@ const NavigationBar = () => {
 
   const logout = () => {
     localStorage.removeItem("accessToken")
-    setAuthState({ username: "", id: 0, status: false });
+    setAuthState({ username: "", id: 0, status: false});
   }
+
+  useEffect(() => {
+    axios.get('/api/auth/getPicture', {
+      headers: {
+        accessToken: localStorage.getItem("accessToken"),
+      },
+    }).then((response) => {
+      if (response.data.error) {
+      } else {
+        setImageState(response.data)
+        
+      }
+    })
+  }, [imageState])
 
   return (
     <>
@@ -98,9 +116,7 @@ const NavigationBar = () => {
                   minW={0}>
                   <Avatar
                     size={'sm'}
-                    src={
-                      'https://i.postimg.cc/Kjqfbv2m/Screenshot-2022-05-28-at-5-59-42-PM.png'
-                    }
+                    src={imageState}
                   />
                 </MenuButton>
               ) : <></>}
@@ -109,7 +125,7 @@ const NavigationBar = () => {
                   <Center>
                     <Avatar
                       size={'2xl'}
-                      src={'https://i.postimg.cc/Kjqfbv2m/Screenshot-2022-05-28-at-5-59-42-PM.png'}
+                      src={imageState}
                     />
                   </Center>
                   <br />

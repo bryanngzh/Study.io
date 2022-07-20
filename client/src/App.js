@@ -8,6 +8,7 @@ import Profile from "./pages/Profile";
 import Notes from "./pages/Notes"
 import { AuthContext } from "./helpers/AuthContext";
 import { SettingsContext } from "./helpers/SettingsContext";
+import { ImageContext } from "./helpers/ImageContext";
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 
@@ -23,6 +24,10 @@ function App() {
     work: 20,
     short: 5,
     long: 10,
+  })
+
+  const [imageState, setImageState] = useState({
+    image: "",
   })
 
   useEffect(() => {
@@ -46,6 +51,7 @@ function App() {
   return (
     <div className="App">
       <AuthContext.Provider value={{ authState, setAuthState }}>
+      <ImageContext.Provider value = {{imageState, setImageState}}>
       <SettingsContext.Provider value={{ 
           newTimer, setNewTimer
         }}>
@@ -59,7 +65,8 @@ function App() {
             <Route path="/notes" exact element={<Notes />} />
           </Routes>
           </BrowserRouter>
-        </SettingsContext.Provider>
+          </SettingsContext.Provider>
+          </ImageContext.Provider>
       </AuthContext.Provider>
     </div>
   );
