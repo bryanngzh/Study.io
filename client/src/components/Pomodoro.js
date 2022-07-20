@@ -173,7 +173,7 @@ const Pomodoro = () => {
 
     return (
         <div title="pomodoro">
-            <Heading as='h4' size='md'> Pomodoro </Heading>
+            <Heading as='h4' size='md'> Pomodoro ⏰ </Heading>
             <Stack spacing={7}>
                 <VStack>
                     <HStack>

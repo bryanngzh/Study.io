@@ -96,7 +96,7 @@ const deleteReminder = (event) => {
       <Stack spacing={4}>
         <Box>
         <Stack spacing={4}>
-          <Heading as='h4' size='md'> Upcoming Events </Heading>
+          <Heading as='h4' size='md'> Upcoming Events 🗓 </Heading>
           <Box>
             <TableContainer>
                       <Table variant='simple' size="md" className="table-tiny">
@@ -233,7 +233,7 @@ const deleteReminder = (event) => {
                           </Button> */}
                           <ReminderClearModal />
                           </HStack>
-                        </Flex>
+                    </Flex>
                     
               </Box>
               </>

@@ -11,7 +11,7 @@ import {
     TableCaption,
     TableContainer,
     useColorModeValue,
-    Center, Stack
+    Center, Stack, HStack, Spacer, Flex
   } from '@chakra-ui/react'
 import { Checkbox, CheckboxGroup } from '@chakra-ui/react'
 import {
@@ -24,6 +24,7 @@ import { Input } from '@chakra-ui/react'
 import { Box } from '@chakra-ui/react'
 import { IconButton } from '@chakra-ui/react'
 import { DeleteIcon } from '@chakra-ui/icons'
+import TaskModal from "./TaskModal"
 
 
 const Task = () => {
@@ -125,12 +126,13 @@ const Task = () => {
     return (
         <div title="taskbar">
             <Stack>
+
                 <Heading as='h4' size='md'> Tasks 📝  </Heading>
                 <Box bg={useColorModeValue('white.100')} align={'center'} justify={'center'} p={4} >
                     <form className="form" onSubmit={addTask}>
                         <FormControl>
                             <Input
-                                size="sm" 
+                                size="md" 
                                 placeholder="Add a task..." 
                                 value={inputVal}
                                 type="text"
@@ -139,7 +141,7 @@ const Task = () => {
                         </FormControl>
                     </form>
                     <TableContainer>
-                        <Table variant='simple' size="sm" className="table-tiny">
+                        <Table variant='simple' size="md" className="table-tiny">
                             <Thead>
                             <Tr>
                                 <Th></Th>
@@ -172,6 +174,12 @@ const Task = () => {
                         </Table>
                     </TableContainer>
                 </Box>
+                <Flex>  
+                          <Spacer />
+                          <HStack spacing={2}>
+                          <TaskModal />
+                          </HStack>
+                </Flex>
             </Stack>
 
             
