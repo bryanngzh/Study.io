@@ -62,10 +62,12 @@ const ReminderModal = () => {
 
         selectedDate = selectedDate.split("T")[0]
         temp = temp.split("T")[0]
-
+        
         if (message.length > 0 && tag.length > 0) {
             if (selectedDate < temp) {
                 alert("Please enter a valid date!")
+            } else if (parseInt(drawerTime) >= parseInt(drawerEndTime)) {
+                alert("Please enter a valid time!")
             } else {
                 axios.post("/api/reminder/addReminder", {
                 date: selectedDate, startTime: drawerTime, endTime: drawerEndTime, 
