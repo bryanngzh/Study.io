@@ -55,6 +55,21 @@ const Reminder = () => {
     "21:40", "21:50", "22:00", "22:10", "22:20", "22:30", "22:40", "22:50", "23:00", "23:10", "23:20",
     "23:30", "23:40", "23:50"]
 
+  var month_dict = {
+    "01" : "Jan",
+    "02" : "Feb",
+    "03" : "Mar",
+    "04" : "Apr",
+    "05" : "May",
+    "06" : "Jun",
+    "07" : "Jul",
+    "08" : "Aug",
+    "09" : "Sep",
+    "10" : "Oct",
+    "11" : "Nov",
+    "12" : "Dec",
+  };
+
   useEffect(() => {
     if (localStorage.getItem("accessToken")) {
         axios.get("/api/reminder", {
@@ -103,6 +118,7 @@ const deleteReminder = (event) => {
                           <Thead>
                           <Tr>
                               <Th> Date </Th>
+                              <Th> Time </Th>
                               <Th> Event </Th>
                               <Th> Tags </Th>
                               <Th> Notes </Th>
@@ -118,7 +134,10 @@ const deleteReminder = (event) => {
                                   <Tr>
                                       <>
                                         <Td>
-                                            {reminder.date + " @ " + detailedTime[reminder.startTime] + " - " + detailedTime[reminder.endTime]}
+                                            {reminder.date.split("-")[2] + " " + month_dict[reminder.date.split("-")[1]] + " " + reminder.date.split("-")[0]}
+                                        </Td>
+                                        <Td>
+                                            {detailedTime[reminder.startTime] + " - " + detailedTime[reminder.endTime]}
                                         </Td>
                                         <Td>
                                             {reminder.event}
@@ -138,6 +157,7 @@ const deleteReminder = (event) => {
                           </Tbody>
                           <Tfoot>
                             <Tr>
+                                <Th> </Th>
                                 <Th> </Th>
                                 <Th isNumeric> </Th>
                                 <Th> </Th>
@@ -173,11 +193,12 @@ const deleteReminder = (event) => {
                           <Table variant='simple' size="md" className="table-tiny">
                               <Thead>
                               <Tr>
-                                  <Th> Date </Th>
-                                  <Th> Event </Th>
-                                  <Th> Tags </Th>
-                                  <Th> Notes </Th>
-                                  <Th> </Th>
+                                <Th> Date </Th>
+                                <Th> Time </Th>
+                                <Th> Event </Th>
+                                <Th> Tags </Th>
+                                <Th> Notes </Th>
+                                <Th> </Th>
                               </Tr>
                               </Thead>
                               <Tbody>
@@ -190,7 +211,12 @@ const deleteReminder = (event) => {
                                           <>
                                             <Td>
                                                 <Text color='red'>
-                                                  {reminder.date + " @ " + detailedTime[reminder.startTime] + " - " + detailedTime[reminder.endTime]}
+                                                  {reminder.date.split("-")[2] + " " + month_dict[reminder.date.split("-")[1]] + " " + reminder.date.split("-")[0]}
+                                                </Text>
+                                            </Td>
+                                            <Td>
+                                                <Text color='red'>
+                                                  {detailedTime[reminder.startTime] + " - " + detailedTime[reminder.endTime]}
                                                 </Text>
                                             </Td>
                                             <Td>
@@ -215,6 +241,7 @@ const deleteReminder = (event) => {
                               </Tbody>
                               <Tfoot>
                                 <Tr>
+                                    <Th> </Th>
                                     <Th> </Th>
                                     <Th isNumeric> </Th>
                                     <Th> </Th>
@@ -244,7 +271,7 @@ const deleteReminder = (event) => {
                 <Heading  size='md'>
                   <Highlight
                     query='You do not have any expired events.'
-                    styles={{ px: '2', py: '1', rounded: 'full', bg: 'red.100' }}
+                    styles={{ px: '2', py: '1', rounded: 'full', bg: 'green.100' }}
                   >
                     You do not have any expired events.
                   </Highlight>
