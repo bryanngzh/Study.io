@@ -10,7 +10,6 @@ factory-boy==3.2.1
 Faker==13.14.0
 filelock==3.7.1
 Flask==2.1.2
-Flask-MongoAlchemy==0.7.2
 greenlet==1.1.2
 idna==3.2
 importlib-metadata==4.11.4
