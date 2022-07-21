@@ -254,7 +254,7 @@ const Notes = () => {
                 </Center>
               </Flex>
             </Tooltip> */}
-            <SearchNote />
+            <SearchNote editorState={setFullEditor} noteState={setNoteName} noteIDState={setNoteID} />
             <Tooltip label='Click to toggle delete' fontSize='md'  placement='right'>
               <Flex role="button" _hover={{ bg: color }} height="35px" width="300px" onClick={() => {setSettings(!settings)}}>
                 <Center>
@@ -333,7 +333,6 @@ const Notes = () => {
               <Flex>
                 <Heading>{noteName ? noteName : "Untitled"}</Heading>
                 <Spacer />
-                
               </Flex>
               <NoteEditor name={noteName} id={noteID} />
             </Stack>
