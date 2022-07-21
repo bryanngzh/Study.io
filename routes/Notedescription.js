@@ -81,7 +81,8 @@ router.get("/:id", validateToken, async (req, res) => {
 router.post("/editNote", validateToken, async (req, res) => {
   try {
       await NoteDescriptionModel.findByIdAndUpdate(req.body.id, {
-        content: req.body.content
+        content: req.body.content,
+        htmlContent: req.body.htmlContent
     }).exec()
       res.json("SUCCESS")
   } catch (error) {

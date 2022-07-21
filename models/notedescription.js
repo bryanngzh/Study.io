@@ -29,7 +29,12 @@ const Notedescription = new mongoose.Schema(
         content: {
           type: Array,
           required: true,
-        }
+        },
+        htmlContent: {
+          type: String,
+          required: false,
+      },
+        
         
     },
     { collection: "notedescription-data" }

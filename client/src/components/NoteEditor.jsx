@@ -172,9 +172,11 @@ const NoteEditor = (props) => {
     content: '',
     onUpdate: ({ editor }) => {
       const json = editor.getJSON()
+      const html = editor.getHTML()
       axios.post("/api/notedescription/editNote", {
         id: props.id,
         content: json.content,
+        htmlContent: html
         }, {
             headers: {
                 accessToken: localStorage.getItem("accessToken")
