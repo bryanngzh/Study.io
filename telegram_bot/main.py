@@ -49,7 +49,7 @@ def version(message):
     chat_id = message.chat.id
     chat_user = message.chat.username
 
-    message_text = "v2"
+    message_text = "v2.2"
     bot.send_message(chat_id, message_text, parse_mode= 'HTML')
 
 @bot.message_handler(commands=['start'])
@@ -395,8 +395,15 @@ def reminders(message):
                 #Only display non-expired tasks
                 today = datetime.now() + timedelta(hours=8)
                 if day_dict.get(result["day"]) == str(today.strftime("%A")):
-                    response += "\n" + "<b>" + detailedTime[int(result["startTime"])] + " - " + detailedTime[int(result["endTime"])] + " (" + result["location"] + ")</b> | " + result["name"] + " | " + result["code"]
-                    counter = counter + 1
+                    if result["nusmods"] == True:
+                        response += "\n" + "<b>" + detailedTime[int(result["startTime"])] + " - " + detailedTime[int(result["endTime"])] + " (" + result["location"] + ")</b> | " + result["name"] + " | " + result["code"]
+                        counter = counter + 1
+                    elif result["nusmods"] == False: 
+                        if len(result["location"]) > 0:
+                            response += "\n" + "<b>" + detailedTime[int(result["startTime"])] + " - " + detailedTime[int(result["endTime"])] + " (" + result["location"] + ")</b> | " + result["name"]
+                        else:
+                            response += "\n" + "<b>" + detailedTime[int(result["startTime"])] + " - " + detailedTime[int(result["endTime"])] + "</b> | " + result["name"]
+                        counter = counter + 1
         if len(response) > 0:
             bot.send_message(chat_id, response, parse_mode= 'HTML')
         else:
@@ -457,19 +464,40 @@ def reminders(message):
         }
         response = ""
         start = True
-        day = "Monday"
+        day = ""
         
         for result in results :
                 #Only display non-expired tasks
                 if start:
-                    response += "<b>Monday</b>\n" + "<b>" + detailedTime[int(result["startTime"])] + " - " + detailedTime[int(result["endTime"])] + " (" + result["location"] + ")</b> | " + result["name"] + " | " + result["code"]
-                    start = False
+                    if result["nusmods"] == True:
+                        day = day_dict.get(result["day"])
+                        response += "<b>" + day + "</b>\n" + "<b>" + detailedTime[int(result["startTime"])] + " - " + detailedTime[int(result["endTime"])] + " (" + result["location"] + ")</b> | " + result["name"] + " | " + result["code"]
+                        start = False
+                    else:
+                        day = day_dict.get(result["day"])
+                        if len(result["location"]) > 0:
+                            response += "<b>" + day + "</b>\n" + "<b>" + detailedTime[int(result["startTime"])] + " - " + detailedTime[int(result["endTime"])] + " (" + result["location"] + ")</b> | " + result["name"] 
+                            start = False
+                        else:
+                            response += "<b>" + day + "</b>\n" + "<b>" + detailedTime[int(result["startTime"])] + " - " + detailedTime[int(result["endTime"])] + "</b> | " + result["name"] 
+                            start = False
                 elif day_dict.get(result["day"]) == day:
-                    response += "\n" + "<b>" + detailedTime[int(result["startTime"])] + " - " + detailedTime[int(result["endTime"])] + " (" + result["location"] + ")</b> | " + result["name"] + " | " + result["code"]
+                    if result["nusmods"] == True:
+                        response += "\n" + "<b>" + detailedTime[int(result["startTime"])] + " - " + detailedTime[int(result["endTime"])] + " (" + result["location"] + ")</b> | " + result["name"] + " | " + result["code"]
+                    else:
+                        if len(result["location"]) > 0:
+                            response += "\n" + "<b>" + detailedTime[int(result["startTime"])] + " - " + detailedTime[int(result["endTime"])] + " (" + result["location"] + ")</b> | " + result["name"]
+                        else:
+                            response += "\n" + "<b>" + detailedTime[int(result["startTime"])] + " - " + detailedTime[int(result["endTime"])] + "</b> | " + result["name"]
                 else:
                     day = day_dict.get(result["day"])
-                    response += "\n\n<b>" + day + "</b>\n" + "<b>" + detailedTime[int(result["startTime"])] + " - " + detailedTime[int(result["endTime"])] + " (" + result["location"] + ")</b> | " + result["name"] + " | " + result["code"]
-
+                    if result["nusmods"] == True:
+                        response += "\n\n<b>" + day + "</b>\n" + "<b>" + detailedTime[int(result["startTime"])] + " - " + detailedTime[int(result["endTime"])] + " (" + result["location"] + ")</b> | " + result["name"] + " | " + result["code"]
+                    else:
+                        if len(result["location"]) > 0:
+                            response += "\n\n<b>" + day + "</b>\n" + "<b>" + detailedTime[int(result["startTime"])] + " - " + detailedTime[int(result["endTime"])] + " (" + result["location"] + ")</b> | " + result["name"]
+                        else:
+                            response += "\n\n<b>" + day + "</b>\n" + "<b>" + detailedTime[int(result["startTime"])] + " - " + detailedTime[int(result["endTime"])] + "</b> | " + result["name"]
         if len(response) > 0:
             bot.send_message(chat_id, response, parse_mode= 'HTML')
         else:
@@ -512,7 +540,7 @@ def send_today_reminders():
             ("date", 1), ("startTime", 1),
             ]
             )
-            response = "Reminders for the day:"
+            response = "<b>REMINDER ALERT!</b> 🔔 \nYou have the following activites today:"
             counter = 1
 
             for result in results :
@@ -574,7 +602,7 @@ def send_reminders():
             ]
             )
             three_days_later = datetime.now() + timedelta(days=3) + timedelta(hours=8)
-            response = "Reminders on " + str(three_days_later).split(" ")[0].split("-")[2] + " " + month_dict.get(str(three_days_later).split(" ")[0].split("-")[1]) + " " + str(three_days_later).split(" ")[0].split("-")[0] + ":"
+            response = "<b>REMINDER ALERT!</b> 🔔 \nYou have the following activities on " + str(three_days_later).split(" ")[0].split("-")[2] + " " + month_dict.get(str(three_days_later).split(" ")[0].split("-")[1]) + " " + str(three_days_later).split(" ")[0].split("-")[0] + ":"
             counter = 1
             
             for result in results :
