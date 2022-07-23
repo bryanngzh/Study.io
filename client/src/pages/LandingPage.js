@@ -198,6 +198,13 @@ const LandingPage = () => {
                   color: 'gray.500',
                 }}
               />
+              <Text color={'gray.800'}>
+                Forgot your password? {" Reset "}
+                <Link href="/forgotPassword" color={'blue.400'}>
+                here
+                </Link> 
+                {"."}
+              </Text>  
               <Button fontFamily={'heading'} bg={'blue.400'} color={'gray.800'} onClick={loginUser}>
                 Login
               </Button>
