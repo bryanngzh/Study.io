@@ -286,8 +286,9 @@ const Notes = () => {
                   <Spacer /><DeleteFolder id={x._id} />
                   </>
                   : <></>}
-                  </Flex> )}
-            <Flex role="button" _hover={{ bg: color }} height="35px" width="300px">
+              </Flex>)}
+            <Tooltip label='Click on the text to add' fontSize='md'  placement='right'>
+              <Flex role="button" _hover={{ bg: color }} height="35px" width="300px">
                 <Center>
                 &nbsp;
                 <SmallAddIcon />
@@ -297,7 +298,8 @@ const Notes = () => {
                   <EditableInput onChange={(e) => setName(e.target.value)}/>
                 </Editable>
                 </Center>
-            </Flex>
+              </Flex>
+            </Tooltip>
             
             <Tooltip label='Restore Deleted Notes' fontSize='md'  placement='right'>
               <Flex
@@ -360,9 +362,11 @@ const Notes = () => {
                     {/* <Td role="button" _hover={{ bg: color }}><Tag colorScheme='blue'>Week {note.week}</Tag></Td> */}
                     <Td>
                       <Menu isLazy>
-                        <MenuButton onClick={() => { note.week ? setWeek(note.week) : setWeek("click to edit") }}>
-                          {note.week ? note.week : <Text as="em">untitled</Text>}
-                        </MenuButton>
+                        <Tooltip label="Click to Edit">
+                          <MenuButton onClick={() => { note.week ? setWeek(note.week) : setWeek("click to edit") }}>
+                            {note.week ? note.week : <Text as="em">untitled</Text>}
+                          </MenuButton>
+                        </Tooltip>
                         <MenuList>
                           <Editable value={week} p={2} onSubmit={() => { editWeek(note, week) }} >
                             <EditablePreview />
@@ -378,9 +382,11 @@ const Notes = () => {
                       onMouseLeave={() => { setButtonOpacity(0); setCurrentFocus("") }}>
                       <Flex>
                         <Menu isLazy>
-                          <MenuButton onClick={() => { note.note ? setTopic(note.note) : setTopic("click to edit") }}>
-                            {note.note ? note.note : <Text as="em">untitled</Text>}
-                          </MenuButton>
+                          <Tooltip label="Click to Edit">
+                            <MenuButton onClick={() => { note.note ? setTopic(note.note) : setTopic("click to edit") }}>
+                              {note.note ? note.note : <Text as="em">untitled</Text>}
+                            </MenuButton>
+                          </Tooltip>
                           <MenuList>
                             <Editable value={topic} p={2} onSubmit={() => { editTopic(note, topic) }} >
                               <EditablePreview />
@@ -402,9 +408,11 @@ const Notes = () => {
                     </Td>
                     <Td>
                       <Menu isLazy>
-                        <MenuButton onClick={() => { note.unit ? setUnit(note.unit) : setUnit("click to edit") }}>
-                          {note.unit ? note.unit : <Text as="em">untitled</Text>}
-                        </MenuButton>
+                        <Tooltip label="Click to Edit">
+                          <MenuButton onClick={() => { note.unit ? setUnit(note.unit) : setUnit("click to edit") }}>
+                            {note.unit ? note.unit : <Text as="em">untitled</Text>}
+                          </MenuButton>
+                        </Tooltip>
                         <MenuList>
                           <Editable value={unit} p={2} onSubmit={() => { editUnit(note, unit) }} >
                             <EditablePreview />

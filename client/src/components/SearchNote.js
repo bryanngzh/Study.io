@@ -108,7 +108,7 @@ const SearchNote = ({ editorState, noteState, noteIDState}) => {
   
   return (
     <div title="searchNote">
-      <Tooltip label='Feature to be completed' fontSize='md'  placement='right'>
+      <Tooltip label='Find your notes' fontSize='md'  placement='right'>
         <Flex role="button" _hover={{ bg: color}} height="35px" width="300px" onClick={onOpen}>
           <Center>
             &nbsp;
