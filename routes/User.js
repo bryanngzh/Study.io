@@ -200,6 +200,8 @@ router.post("/requestPasswordReset", async (req, res) => {
     UserModel.find({email: email}).then((data) => {
         if (data.length) {
             sendResetEmail(data[0], redirectUrl, res)
+        } else {
+            res.json({error: "Please enter a valid email address."})
         }
     })
 })
@@ -265,31 +267,23 @@ router.post("/resetPassword", async (req, res) => {
                             })
                         })
                 } else {
+                    // strings matched
+                    // hash password again
+                    const saltRounds = 10;
                     bcrypt
-                        .compare(resetString, hashedResetString)
-                        .then((result) => {
-                            if (result) {
-                                // strings matched
-                                // hash password again
-                                const saltRounds = 10;
-                                bcrypt
-                                    .hash(newPassword, saltRounds)
-                                    .then(hashedNewPassword => {
-                                        // Update passowrd
-                                        UserModel
-                                            .updateOne({_id: userId}, {password: hashedNewPassword})
-                                            .then(() => {
-                                                // update complete, delete reset record
-                                                PasswordResetModel
-                                                    .deleteOne({userId})
-                                                    .then(() => {
-                                                        res.json("SUCCESS. Password reset complete.")
-                                                    })
-                                            })
-                                    })
-                            } else {
-                                res.json({ error: "Invalid password." })
-                            }
+                        .hash(newPassword, saltRounds)
+                        .then(hashedNewPassword => {
+                            // Update passowrd
+                            UserModel
+                                .updateOne({_id: userId}, {password: hashedNewPassword})
+                                .then(() => {
+                                    // update complete, delete reset record
+                                    PasswordResetModel
+                                        .deleteOne({userId})
+                                        .then(() => {
+                                            res.json("SUCCESS. Password reset complete.")
+                                        })
+                                })
                         })
                 }
 

@@ -7,6 +7,7 @@ import NavigationBar from './components/NavigationBar';
 import Profile from "./pages/Profile";
 import Notes from "./pages/Notes"
 import ResetPassword from "./pages/ResetPassword"
+import ForgotPassword from "./pages/ForgotPassword";
 import { AuthContext } from "./helpers/AuthContext";
 import { SettingsContext } from "./helpers/SettingsContext";
 import { ImageContext } from "./helpers/ImageContext";
@@ -53,9 +54,6 @@ function App() {
   useEffect(() => {
     axios.get('/api/auth/getPasswordReset').then((response) => {
       setPassword(response.data)
-
-      console.log(password)
-      
     })
   }, [password])
 
@@ -71,6 +69,7 @@ function App() {
           <Routes>
             <Route path="/" exact element={ <LandingPage />} />
             <Route path="/register" exact element={<Registration />} />
+            <Route path="/forgotPassword" exact element={<ForgotPassword />} />
             <Route path="/dashboard" exact element={<Dashboard />} />
             <Route path="/profile" exact element={<Profile />} />
             <Route path="/notes" exact element={<Notes />} />

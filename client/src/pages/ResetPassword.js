@@ -21,14 +21,19 @@ import {
     Tooltip,
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
+import {
+  Alert,
+  AlertIcon,
+  AlertTitle,
+  AlertDescription,
+} from '@chakra-ui/react'
 
 const ResetPassword = (props) => {
-    const [username, setUsername] = useState("")
-    const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [confirmPassword, setConfirmPassword] = useState("")
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [isReset, setisReset] = useState(false)
 
     const { authState } = useContext(AuthContext);
 
@@ -40,14 +45,14 @@ const ResetPassword = (props) => {
         }
     })
 
-    const registerUser = (event) => {
-      event.preventDefault()
-      axios.post("/api/auth", {username, email, password, confirmPassword}).then((response) => {
+    const changePassword = (event) => {
+
+      axios.post("/api/auth/resetPassword", {userId: props.user.split("/")[2], resetString:props.user.split("/")[3], newPassword: password}).then((response) => {
         console.log(response.data)
         if (response.data.error) {
             alert(response.data.error)
         } else {
-            navigate("/")
+            navigate('/')
         }
       })
     }
@@ -61,7 +66,7 @@ const ResetPassword = (props) => {
           <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
             <Stack align={'center'}>
               <Heading fontSize={'4xl'} textAlign={'center'}>
-                {props.user}
+                Reset your password
               </Heading>
               <Text fontSize={'lg'} color={'gray.600'}>
                 to enjoy all of our cool features ✌️
@@ -73,34 +78,8 @@ const ResetPassword = (props) => {
               boxShadow={'lg'}
               p={8}>
               <Stack spacing={4}>
-                <HStack>
-                  {/* <Box> */}
-                    <FormControl id="username" isRequired>
-                      <FormLabel>Username</FormLabel>
-                      <Input 
-                        type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                      />
-                    </FormControl>
-                  {/* </Box> */}
-                  {/* <Box>
-                    <FormControl id="lastName">
-                      <FormLabel>Last Name</FormLabel>
-                      <Input type="text" />
-                    </FormControl>
-                  </Box> */}
-                </HStack>
-                <FormControl id="email" isRequired>
-                  <FormLabel>Email address</FormLabel>
-                    <Input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                    />
-                </FormControl>
                 <FormControl id="password" isRequired>
-                <FormLabel>Password</FormLabel>
+                <FormLabel>New Password</FormLabel>
                 <Tooltip label="Password must contain minimum 6 characters and 
                   have at least 1 special character. eg: !,?,@,$" aria-label='A tooltip'>
                     <InputGroup>
@@ -122,7 +101,7 @@ const ResetPassword = (props) => {
                   </Tooltip>
               </FormControl>
               <FormControl id="password" isRequired>
-                  <FormLabel>Confirm Password</FormLabel>
+                  <FormLabel>Confirm New Password</FormLabel>
                   <InputGroup>
                     <Input
                       type={showConfirmPassword ? 'text' : 'password'} 
@@ -143,65 +122,21 @@ const ResetPassword = (props) => {
                 <Stack spacing={10} pt={2}>
                   <Button
                     loadingText="Submitting"
-                    onClick={registerUser}
+                    onClick={() => changePassword()}
                     size="lg"
                     bg={'blue.400'}
                     color={'white'}
                     _hover={{
                       bg: 'blue.500',
                     }}>
-                    Sign up
+                    Change Password
                   </Button>
-                </Stack>
-                <Stack pt={6}>
-                  <Text align={'center'}>
-                    Already a user? <Link href="/" color={'blue.400'}>Login</Link>
-                  </Text>
                 </Stack>
               </Stack>
             </Box>
           </Stack>
         </Flex>
       );
-
-    // return (
-    //     <div>
-    //          <h1 className="large text-primary">Sign Up</h1>
-    //             <p className="lead">
-    //                 <i className="fas fa-user"></i> Create Your Account
-    //             </p>
-    //         <form className="form" onSubmit={registerUser}>
-    //           <div className="form-group">
-    //             <input 
-    //                 value={username}
-    //                 onChange={(e) => setUsername(e.target.value)}
-    //                 type="text"
-    //                 placeholder="Username" 
-    //             />
-    //           </div>
-    //           <div className="form-group">
-    //             <input 
-    //                 value={email}
-    //                 onChange={(e) => setEmail(e.target.value)}
-    //                 type="email"
-    //                 placeholder="Email" 
-    //             />
-    //           </div>
-    //           <div className="form-group">
-    //             <input 
-    //                 value={password}
-    //                 onChange={(e) => setPassword(e.target.value)}
-    //                 type="password"
-    //                 placeholder="Password" 
-    //                 />
-    //             </div>
-    //             <input type="submit" className="btn btn-primary" value="Register" />      
-    //         </form>
-    //         <p className="my-1">
-    //           Already have an account? <Link to ="/login">Sign In</Link>
-    //         </p>
-    //     </div>
-    // )
 }
 
 export default ResetPassword
