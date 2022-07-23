@@ -47,7 +47,13 @@ const ResetPassword = (props) => {
 
     const changePassword = (event) => {
 
-      axios.post("/api/auth/resetPassword", {userId: props.user.split("/")[2], resetString:props.user.split("/")[3], newPassword: password}).then((response) => {
+      axios.post("/api/auth/resetPassword",
+        {
+          userId: props.user.split("/")[2],
+          resetString: props.user.split("/")[3],
+          newPassword: password,
+          confirmNewPassword: confirmPassword
+        }).then((response) => {
         console.log(response.data)
         if (response.data.error) {
             alert(response.data.error)

@@ -245,52 +245,65 @@ const sendResetEmail = ({_id, email}, redirectUrl, res) => {
 
 // Password Reset
 router.post("/resetPassword", async (req, res) => {
-    const { userId, resetString, newPassword } = req.body;
-    
+    const { userId, resetString, newPassword, confirmNewPassword } = req.body;
+
+    if (newPassword != confirmNewPassword) {
+        res.json({ error: "Passwords do not match!" })
+    } else if (newPassword.length < 6) {
+        res.json({ error: "Please enter a valid password with at least 6 characters." })
+    } else {
+        const temp = validatePassword(newPassword)
+        if (temp === 1) {
+            res.json({ error: "Password should not contain a space" });
+        } else if (temp === 3) {
+            res.json({ error: "Password must contain at least 1 special character. eg: !,?,@,$" });
+        } else {
+                
     PasswordResetModel
-        .find( {userId} )
-        .then(result => {
-            if (result.length > 0) {
-                // password reset record exists so we proceed
+    .find( {userId} )
+    .then(result => {
+        if (result.length > 0) {
+            // password reset record exists so we proceed
 
-                const { expiresAt } = result[0];
-                const hashedResetString = result[0].resetString
+            const { expiresAt } = result[0];
+            const hashedResetString = result[0].resetString
 
-                if (expiresAt < Date.now()) {
-                    // expired
-                    PasswordResetModel
-                        .deleteOne({userId})
-                        .then(() => {
-                            res.json({
-                                status: "FAILED",
-                                message: "Password reset link has expired."
-                            })
+            if (expiresAt < Date.now()) {
+                // expired
+                PasswordResetModel
+                    .deleteOne({userId})
+                    .then(() => {
+                        res.json({
+                            status: "FAILED",
+                            message: "Password reset link has expired."
                         })
-                } else {
-                    // strings matched
-                    // hash password again
-                    const saltRounds = 10;
-                    bcrypt
-                        .hash(newPassword, saltRounds)
-                        .then(hashedNewPassword => {
-                            // Update passowrd
-                            UserModel
-                                .updateOne({_id: userId}, {password: hashedNewPassword})
-                                .then(() => {
-                                    // update complete, delete reset record
-                                    PasswordResetModel
-                                        .deleteOne({userId})
-                                        .then(() => {
-                                            res.json("SUCCESS. Password reset complete.")
-                                        })
-                                })
-                        })
-                }
-
+                    })
             } else {
-                res.json({ error: "Unable to reset password" })
+                // strings matched
+                // hash password again
+                const saltRounds = 10;
+                bcrypt
+                    .hash(newPassword, saltRounds)
+                    .then(hashedNewPassword => {
+                        // Update passowrd
+                        UserModel
+                            .updateOne({_id: userId}, {password: hashedNewPassword})
+                            .then(() => {
+                                // update complete, delete reset record
+                                PasswordResetModel
+                                    .deleteOne({userId})
+                                    .then(() => {
+                                        res.json("SUCCESS. Password reset complete.")
+                                    })
+                            })
+                    })
             }
-        })
+        } else {
+            res.json({ error: "Unable to reset password" })
+        }
+    })
+        }
+    } 
 })
 
 // Get all reset password data
