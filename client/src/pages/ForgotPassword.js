@@ -43,7 +43,7 @@ const ForgotPassword = (props) => {
 
     const sendEmail = (event) => {
 
-      axios.post("/api/auth/requestPasswordReset", {email: email, redirectUrl: "http://localhost:3000"}).then((response) => {
+      axios.post("/api/auth/requestPasswordReset", {email: email, redirectUrl: "https://study-io.herokuapp.com/"}).then((response) => {
         console.log(response.data)
         if (response.data.error) {
           alert(response.data.error)
