@@ -37,6 +37,7 @@ app.use("/api/reminder", reminderRoute)
 const noteRoute = require("./routes/Note")
 app.use("/api/note", noteRoute)
 
+
 // Production
 if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging") {
     app.use(express.static("client/build"));

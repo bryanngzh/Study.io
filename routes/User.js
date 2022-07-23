@@ -7,7 +7,32 @@ const { check, validationResult } = require('express-validator');
 
 // Models
 const UserModel = require("../models/user");
+const PasswordResetModel = require("../models/passwordreset")
 
+// unique string
+const {v4: uuidv4} = require("uuid")
+
+// email handler
+const nodemailer = require("nodemailer")
+
+// nodemailer transporter
+let transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+        user: "study.iobot@gmail.com",
+        pass: "iipsuxrhdiversse"
+    }
+})
+
+// testing nodemailer
+transporter.verify((error, success) => {
+    if (error) {
+        console.log(error);
+    } else {
+        console.log("Ready to mail out messages")
+        console.log(success)
+    }
+})
 
 //custom function to check if password is good 
 const validatePassword = (password) => {
@@ -166,6 +191,123 @@ router.get('/token', validateToken, async (req, res) => {
 //auth state
 router.get('/auth', validateToken, (req, res) => {
     res.json(req.user)
+})
+
+// Password Reset Request
+router.post("/requestPasswordReset", async (req, res) => {
+    const { email, redirectUrl } = req.body;
+    
+    UserModel.find({email: email}).then((data) => {
+        if (data.length) {
+            sendResetEmail(data[0], redirectUrl, res)
+        }
+    })
+})
+
+// Send password reset email
+const sendResetEmail = ({_id, email}, redirectUrl, res) => {
+    const resetString = uuidv4() + _id;
+    PasswordResetModel.deleteMany({ userId: _id }).then(result => {
+        // Reset records deleted successfully
+        // Now we send the email
+
+        // mail options
+        const mailOptions = {
+            from: "study.iobot@gmail.com",
+            to: email,
+            subject: "Password Reset",
+            html: `<p>We heard that you lost your password.</p>
+                <p>Don't worry, use the link below to reset your password.</p>
+                <p>This link <b>expires in 60 minutess</b>.</p><p>Press <a href=${redirectUrl + "/resetPassword" + "/" + _id + "/" + resetString}>here</a> to proceed.</p>`
+        }
+
+        // set values in password reset collection
+        const newPasswordReset = new PasswordResetModel({
+            userId: _id,
+            resetString: resetString,
+            createdAt: Date.now(),
+            expiresAt: Date.now() + 3600000
+        })
+        newPasswordReset
+            .save()
+            .then(() => {
+                transporter
+                    .sendMail(mailOptions)
+                    .then(() => {
+                        // reset email sent and password reset record saved
+                        res.json("SUCCESS")
+                    })
+            })
+    })
+}
+
+// Password Reset
+router.post("/resetPassword", async (req, res) => {
+    const { userId, resetString, newPassword } = req.body;
+    
+    PasswordResetModel
+        .find( {userId} )
+        .then(result => {
+            if (result.length > 0) {
+                // password reset record exists so we proceed
+
+                const { expiresAt } = result[0];
+                const hashedResetString = result[0].resetString
+
+                if (expiresAt < Date.now()) {
+                    // expired
+                    PasswordResetModel
+                        .deleteOne({userId})
+                        .then(() => {
+                            res.json({
+                                status: "FAILED",
+                                message: "Password reset link has expired."
+                            })
+                        })
+                } else {
+                    bcrypt
+                        .compare(resetString, hashedResetString)
+                        .then((result) => {
+                            if (result) {
+                                // strings matched
+                                // hash password again
+                                const saltRounds = 10;
+                                bcrypt
+                                    .hash(newPassword, saltRounds)
+                                    .then(hashedNewPassword => {
+                                        // Update passowrd
+                                        UserModel
+                                            .updateOne({_id: userId}, {password: hashedNewPassword})
+                                            .then(() => {
+                                                // update complete, delete reset record
+                                                PasswordResetModel
+                                                    .deleteOne({userId})
+                                                    .then(() => {
+                                                        res.json("SUCCESS. Password reset complete.")
+                                                    })
+                                            })
+                                    })
+                            } else {
+                                res.json({ error: "Invalid password." })
+                            }
+                        })
+                }
+
+            } else {
+                res.json({ error: "Unable to reset password" })
+            }
+        })
+})
+
+// Get all reset password data
+router.get('/getPasswordReset', async (req, res) => {
+    PasswordResetModel.find((err, data) => {
+        if (data) {
+            res.json(data)
+        } else {
+            res.json("Unable to show data")
+        }
+      });
 })
 
 module.exports = {
