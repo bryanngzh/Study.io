@@ -8,6 +8,7 @@ const { check, validationResult } = require('express-validator');
 // Models
 const UserModel = require("../models/user");
 const PasswordResetModel = require("../models/passwordreset")
+const UserVerificationModel = require("../models/userverification")
 
 // unique string
 const {v4: uuidv4} = require("uuid")
@@ -57,6 +58,80 @@ const validatePassword = (password) => {
     }
 }
 
+// Send Verification Email
+const sendVerificationEmail = ({id, email}, res) => {
+    // url to be used in the mail - i think need to change when we upload to herkou
+    const currentUrl = "http://localhost:3000/"
+
+    const uniqueString = uuidv4() + id;
+
+    // mail options
+    const mailOptions = {
+        from: "study.iobot@gmail.com",
+        to: email,
+        subject: "Verify your Email",
+        html: `<p>Verify your email address to complete the signup and login into your account.</p>
+               <p>This link <b>expires in 6 hours</b>.</p><p>Press <a href=${currentUrl + "verifyEmail/" + id + "/" + uniqueString}>here</a> to proceed.</p>`
+    }
+
+        // set values in userVerification collection
+        const newVerification = new UserVerificationModel({
+            userId: id,
+            uniqueString: uniqueString,
+            createdAt: Date.now(),
+            expiresAt: Date.now() + 21600000
+        })
+        newVerification
+            .save()
+            .then(() => {
+                transporter
+                    .sendMail(mailOptions)
+            })
+        
+}
+
+// Verify Email
+router.post("/verify", async(req, res) => {
+    const {userId, uniqueString} = req.body;
+
+    UserVerificationModel
+        .find( {userId: userId, uniqueString: uniqueString} )
+        .then(result => {
+            if (result.length > 0) {
+                // user verification record exists so we proceed
+                const {expiresAt} = result[0];
+                // const storedUniqueString = result[0].uniqueString;
+
+                // checking for expired unique string
+                if (expiresAt < Date.now()) {
+                    // record expired so we delete it
+                    UserVerificationModel
+                        .deleteOne({userId})    
+                    UserModel
+                        .find({_id: userId})
+                        .then(result => {
+                            if (result.isVerified === false) {
+                                UserModel.deleteOne({_id: userId}).then(res.json({ error: "Link has expired. Please sign up again." }))
+                            }
+                        })          
+                        
+                } else {
+                    // valid record exists so we validate the user string
+                    
+                    UserModel
+                        .updateOne({_id: userId}, {isVerified: true})
+                        .then(() => {
+                            res.json("SUCCESS")
+                        })
+                
+                }
+            } else {
+                res.json({ error: "Unable to verify."})
+            }
+        })
+})
+
+
 // Register
 router.post("/", [
     check('email', 'Please include a valid email').isEmail(),
@@ -83,11 +158,15 @@ router.post("/", [
             res.json({ error: "Password must contain at least 1 special character. eg: !,?,@,$" });
         } else {
             bcrypt.hash(req.body.password, 10).then((hash) => {
-                UserModel.create({
+                const newUser = new UserModel({
                     username: req.body.username,
                     email: req.body.email,
                     password: hash,
+                    isVerified: false,
                 })
+                newUser.save().then((result => {
+                    sendVerificationEmail(result, res);
+                }))
             })
             res.json("SUCCESS")
         }
@@ -107,9 +186,9 @@ router.post("/login", async (req, res) => {
         email: req.body.email, 
     }) 
     
-    if (!user) { 
+    if (!user || !user.isVerified) { 
         res.json({ error: "User does not exist"})
-    } else {
+    } else if (user && user.isVerified) {
         bcrypt.compare(req.body.password, user.password).then((match) => {
             if (!match) {
                 res.json({ error: "Please enter a valid password" })
@@ -197,7 +276,7 @@ router.get('/auth', validateToken, (req, res) => {
 router.post("/requestPasswordReset", async (req, res) => {
     const { email, redirectUrl } = req.body;
     
-    UserModel.find({email: email}).then((data) => {
+    UserModel.find({email: email, isVerified: true}).then((data) => {
         if (data.length) {
             sendResetEmail(data[0], redirectUrl, res)
         } else {
@@ -266,7 +345,7 @@ router.post("/resetPassword", async (req, res) => {
             // password reset record exists so we proceed
 
             const { expiresAt } = result[0];
-            const hashedResetString = result[0].resetString
+            // const hashedResetString = result[0].resetString
 
             if (expiresAt < Date.now()) {
                 // expired
@@ -309,6 +388,17 @@ router.post("/resetPassword", async (req, res) => {
 // Get all reset password data
 router.get('/getPasswordReset', async (req, res) => {
     PasswordResetModel.find((err, data) => {
+        if (data) {
+            res.json(data)
+        } else {
+            res.json("Unable to show data")
+        }
+      });
+})
+
+// Get all verification data
+router.get('/getVerification', async (req, res) => {
+    UserVerificationModel.find((err, data) => {
         if (data) {
             res.json(data)
         } else {
