@@ -53,9 +53,12 @@ function App() {
 
   useEffect(() => {
     axios.get('/api/auth/getPasswordReset').then((response) => {
-      setPassword(response.data)
+      if (response.data.error) {
+      } else {
+        setPassword(response.data)
+      }
     })
-  }, [password])
+  }, [])
 
   return (
     <div className="App">
