@@ -54,24 +54,10 @@ const UploadPicture = () => {
   }
 
   useEffect(() => {
-    axios.get('/api/auth/getPicture', {
-      headers: {
-        accessToken: localStorage.getItem("accessToken"),
-      },
-    }).then((response) => {
-      if (response.data.error) {
-      } else {
-        setImageState(response.data)
-      }
-    })
-  }, [])
-
-  useEffect(() => {
     if (image) {
       const reader = new FileReader();
       reader.onloadend = () => {
         updatePicture(reader.result)
-        console.log(reader.result)
         setImageState(reader.result);
       }
       reader.readAsDataURL(image);
