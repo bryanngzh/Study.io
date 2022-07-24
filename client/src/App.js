@@ -8,6 +8,7 @@ import Profile from "./pages/Profile";
 import Notes from "./pages/Notes"
 import ResetPassword from "./pages/ResetPassword"
 import ForgotPassword from "./pages/ForgotPassword";
+import Verification from "./pages/Verification";
 import { AuthContext } from "./helpers/AuthContext";
 import { SettingsContext } from "./helpers/SettingsContext";
 import { ImageContext } from "./helpers/ImageContext";
@@ -16,6 +17,7 @@ import axios from 'axios'
 
 function App() {
   const [password, setPassword] = useState([])
+  const [verification, setVerification] = useState([])
 
   const [authState, setAuthState] = useState({
     username: "",
@@ -51,11 +53,22 @@ function App() {
     })
   }, [])
 
+  // Password Reset
   useEffect(() => {
     axios.get('/api/auth/getPasswordReset').then((response) => {
       if (response.data.error) {
       } else {
         setPassword(response.data)
+      }
+    })
+  }, [])
+
+  // Verification
+  useEffect(() => {
+    axios.get('/api/auth/getVerification').then((response) => {
+      if (response.data.error) {
+      } else {
+        setVerification(response.data)
       }
     })
   }, [])
@@ -78,6 +91,9 @@ function App() {
             <Route path="/notes" exact element={<Notes />} />
             {password.map(item => "/resetPassword/" + item.userId + "/" + item.resetString).map(x =>
                   <Route path={x} exact element={<ResetPassword user={x}/>} />
+            )}
+            {verification.map(item => "/verifyEmail/" + item.userId + "/" + item.uniqueString).map(x =>
+                  <Route path={x} exact element={<Verification user={x}/>} />
             )}
           </Routes>
           </BrowserRouter>
