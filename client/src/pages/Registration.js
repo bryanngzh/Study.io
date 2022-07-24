@@ -18,7 +18,7 @@ import {
     Text,
     useColorModeValue,
     Link,
-    Tooltip,
+    Tooltip, Alert, AlertIcon
 } from '@chakra-ui/react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 
@@ -161,6 +161,10 @@ const Registration = () => {
                 </Stack>
               </Stack>
             </Box>
+            <Alert status='info'>
+              <AlertIcon />
+              Please check your email to verify your account.
+            </Alert>
           </Stack>
         </Flex>
       );
