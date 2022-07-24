@@ -61,7 +61,7 @@ const validatePassword = (password) => {
 // Send Verification Email
 const sendVerificationEmail = ({id, email}, res) => {
     // url to be used in the mail - i think need to change when we upload to herkou
-    const currentUrl = "http://localhost:3000/"
+    const currentUrl = "https://study-io.herokuapp.com/"
 
     const uniqueString = uuidv4() + id;
 

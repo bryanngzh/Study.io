@@ -301,7 +301,7 @@ const Notes = () => {
               </Flex>
             </Tooltip>
             
-            <Tooltip label='Restore Deleted Notes' fontSize='md'  placement='right'>
+            <Tooltip label='Trash' fontSize='md'  placement='right'>
               <Flex
                 top="20px"
                 position="relative"
