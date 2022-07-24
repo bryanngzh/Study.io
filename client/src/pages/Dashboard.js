@@ -8,12 +8,15 @@ import { AuthContext } from "../helpers/AuthContext";
 import { Heading } from '@chakra-ui/react'
 import { Stack, HStack, VStack, StackDivider} from '@chakra-ui/react'
 import { Box, Text } from '@chakra-ui/react'
+import axios from "axios";
+import { ImageContext } from "../helpers/ImageContext";
 
 
 
 const Dashboard = () => {
 
   const { authState } = useContext(AuthContext);
+  const { setImageState} = useContext(ImageContext)
 
   let navigate = useNavigate();
 
@@ -22,6 +25,19 @@ const Dashboard = () => {
           navigate('/');
         }
     })
+  
+    useEffect(() => {
+      axios.get('/api/auth/getPicture', {
+        headers: {
+          accessToken: localStorage.getItem("accessToken"),
+        },
+      }).then((response) => {
+        if (response.data.error) {
+        } else {
+          setImageState(response.data)
+        }
+      })
+    }, [])
 
   function FeatureTask({ title, desc, display, ...rest }) {
     return (
