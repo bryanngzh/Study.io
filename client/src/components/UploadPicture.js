@@ -30,7 +30,7 @@ const UploadPicture = () => {
       if (res.data.error) {
         alert(res.data.error);
       } else {
-        setImageState("https://i.postimg.cc/Kjqfbv2m/Screenshot-2022-05-28-at-5-59-42-PM.png")
+        // setImageState("https://i.postimg.cc/Kjqfbv2m/Screenshot-2022-05-28-at-5-59-42-PM.png")
       }
     }))
   }
@@ -49,6 +49,7 @@ const UploadPicture = () => {
       if (res.data.error) {
         alert(res.data.error);
       } else {
+        setImageState(text)
       }
     }))
   }
@@ -64,14 +65,14 @@ const UploadPicture = () => {
         setImageState(response.data)
       }
     })
-  }, [])
+  }, [image])
 
   useEffect(() => {
     if (image) {
       const reader = new FileReader();
       reader.onloadend = () => {
         updatePicture(reader.result)
-        setImageState(reader.result);
+        // setImageState(reader.result);
       }
       reader.readAsDataURL(image);
     } else {

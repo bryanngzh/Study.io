@@ -30,6 +30,7 @@ import axios from "axios";
 import { AuthContext } from "../helpers/AuthContext";
 import { useNavigate } from "react-router-dom";
 import UploadPicture from '../components/UploadPicture';
+import { ImageContext } from '../helpers/ImageContext';
 
 const Profile = () => {
   const [oldPassword, setOldPassword] = useState("")
@@ -44,6 +45,7 @@ const Profile = () => {
     onClose: onCloseUserModal 
   } = useDisclosure()
   const { authState, setAuthState } = useContext(AuthContext);
+  const { imageState, setImageState } = useContext(ImageContext);
 
   let navigate = useNavigate();
 
@@ -52,6 +54,19 @@ const Profile = () => {
           navigate('/')
         }
     })
+  
+    useEffect(() => {
+      axios.get('/api/auth/getPicture', {
+        headers: {
+          accessToken: localStorage.getItem("accessToken"),
+        },
+      }).then((response) => {
+        if (response.data.error) {
+        } else {
+          setImageState(response.data)
+        }
+      })
+    }, [])
 
   const updatePassword = () => {
     if (newPassword !== confirmNewPassword) {
