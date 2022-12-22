@@ -30,7 +30,6 @@ import {
 } from '@chakra-ui/react';
 import { HamburgerIcon, CloseIcon, MoonIcon, SunIcon } from '@chakra-ui/icons';
 import axios from 'axios';
-import { set } from 'mongoose';
 
 const Links = ['dashboard','notes'];
 
