@@ -25,7 +25,6 @@ With various platforms available to help us manage our time, ranging from notion
 
 As such, we came up with the idea, Study.io, an integrated platform where students are able to plan their time, organise their notes and tasks. There will also be various productivity features such as a pomodoro timer with the web app to facilitate study sessions.
 
-Note: We also wanted to create something that we can use in the future. We will definitely be using Study.io for the future semesters of university. 
 
 ## Aim
 
