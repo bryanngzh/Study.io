@@ -14,9 +14,12 @@ import operator
 import schedule
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.triggers.cron import CronTrigger
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # Telegram Bot setup
-API_KEY = '5477390290:AAHe_YlIBhm8tLPkc_AbQ9gnsCtIFm9aanE'
+API_KEY = os.getenv('TELEGRAM_KEY')
 bot = telebot.TeleBot(API_KEY)
 
 bot.set_my_commands([
@@ -31,7 +34,7 @@ bot.set_my_commands([
 ])
 
 # Database setup
-cluster = MongoClient("mongodb+srv://bryan:bryan@cluster0.fmdfb.mongodb.net/studyio?retryWrites=true&w=majority",
+cluster = MongoClient(os.getenv('DB_KEY'),
 tlsCAFile=certifi.where())
 db = cluster["studyio"]
 collection_user = db["user-data"]
