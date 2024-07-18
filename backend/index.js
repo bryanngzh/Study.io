@@ -1,54 +1,57 @@
 // Imports
-const express = require("express")
-const app = express()
-const mongoose = require("mongoose")
-const cors = require("cors")
+const express = require("express");
+const app = express();
+const mongoose = require("mongoose");
+const cors = require("cors");
 const bodyParser = require("body-parser");
+require("dotenv").config();
 
 // MongoDB
-mongoose.connect("mongodb+srv://bryan:bryan@cluster0.fmdfb.mongodb.net/studyio?retryWrites=true&w=majority") 
+mongoose.connect(process.env.DB_KEY);
 
 // Middleware
-app.use(bodyParser.json({limit: '5mb'}));
-app.use(bodyParser.urlencoded({limit: '5mb', extended: true}));
-app.use(express.json()) // to allow json change to parse for API calls
+app.use(bodyParser.json({ limit: "5mb" }));
+app.use(bodyParser.urlencoded({ limit: "5mb", extended: true }));
+app.use(express.json()); // to allow json change to parse for API calls
 app.use(cors()); // to connect FE to BE
 
 // Models
-const UserModel = require("./models/user")
+const UserModel = require("./models/user");
 
-var path = require('path')
+var path = require("path");
 
 // Routes
-const userRoute = require("../routes/User")
-app.use("/api/auth", userRoute.router)
-const taskRoute = require("../routes/Task")
-app.use("/api/task", taskRoute)
-const timetableRoute = require("../routes/Timetable")
-app.use("/api/timetable", timetableRoute)
-const nusmodsRoute = require("../routes/Nusmods")
-app.use("/api/nusmods", nusmodsRoute)
-const notefolderRoute = require("../routes/Notefolder")
-app.use("/api/notefolder", notefolderRoute)
-const notedescriptionRoute = require("../routes/Notedescription")
-app.use("/api/notedescription", notedescriptionRoute)
-const reminderRoute = require("../routes/Reminder")
-app.use("/api/reminder", reminderRoute)
-const noteRoute = require("../routes/Note")
-app.use("/api/note", noteRoute)
-
+const userRoute = require("./routes/User");
+app.use("/api/auth", userRoute.router);
+const taskRoute = require("./routes/Task");
+app.use("/api/task", taskRoute);
+const timetableRoute = require("./routes/Timetable");
+app.use("/api/timetable", timetableRoute);
+const nusmodsRoute = require("./routes/Nusmods");
+app.use("/api/nusmods", nusmodsRoute);
+const notefolderRoute = require("./routes/Notefolder");
+app.use("/api/notefolder", notefolderRoute);
+const notedescriptionRoute = require("./routes/Notedescription");
+app.use("/api/notedescription", notedescriptionRoute);
+const reminderRoute = require("./routes/Reminder");
+app.use("/api/reminder", reminderRoute);
+const noteRoute = require("./routes/Note");
+app.use("/api/note", noteRoute);
 
 // Production
-if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging") {
-    app.use(express.static("client/build"));
-    app.get("*", (req, res) => {
+if (
+  process.env.NODE_ENV === "production" ||
+  process.env.NODE_ENV === "staging"
+) {
+  app.use(express.static("client/build"));
+  app.get("*", (req, res) => {
     res.sendFile(path.join(__dirname + "/client/build/index.html"));
-    });
-   }
+  });
+}
 
-const port = process.env.PORT || '3001'
+const port = process.env.PORT || "3001";
 
 //Needs this at the start, BE server runs on port 3001, then FE runs on 3000
 app.listen(port, () => {
-    console.log("SERVER RUNNING");
+  console.log("SERVER RUNNING");
 });
